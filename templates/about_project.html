@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About The Project - Real Waste Classification System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    /* === Your Existing Styles === */
+    :root {
+      --primary: #21c87a;
+      --primary-dark: #1a2b3a;
+      --secondary: #232b3b;
+      --accent: #ffd600;
+      --card-bg: #232b3b;
+      --tab-bg: #1a2233;
+      --text: #fff;
+      --muted: #b0b8c1;
+      --success: #21c87a;
+      --danger: #ff5252;
+    }
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background: linear-gradient(135deg, #1a2b3a 0%, #23404a 100%);
+      margin: 0;
+      padding: 0;
+      color: var(--text);
+      min-height: 100vh;
+    }
+    
+    h2, p {
+      margin: 10px;
+    }
+
+    /* Your existing nav styles */
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      background: var(--tab-bg);
+      display: flex;
+    }
+    ul li a {
+      display: block;
+      color: white;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+    ul li a:hover:not(.active) {
+      background: var(--secondary);
+    }
+    ul li a.active {
+      background-color: #04AA6D;
+    }
+    
+    /* === Dashboard Styles === */
+
+    .simple-content {
+        max-width: 1200px;
+        margin: 38px auto;
+        background: transparent; 
+        border-radius: 18px;
+        box-shadow: none;
+        padding: 20px;
+    }
+    
+    .simple-content h1 {
+        color: var(--primary);
+        text-align: center;
+        font-size: 2.2rem;
+        margin-bottom: 24px;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+        gap: 24px;
+    }
+
+    .chart-card {
+        background: var(--secondary);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .chart-card h3 {
+        margin-top: 0;
+        margin-bottom: 16px;
+        color: var(--primary); /* This is your H3 color */
+        font-weight: 600;
+    }
+    
+    canvas {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    .grid-span-all {
+        grid-column: 1 / -1;
+    }
+
+    .footer {
+      margin-top: 48px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.98rem;
+      padding: 18px 0 12px 0;
+    }
+  </style>
+ 
+</head>
+<body>
+  <div class="nav-container">      
+    <ul>
+      <li><a href="/">Home</a></li>      
+      <li><a class="active" href="/about_project">Our Project</a></li> 
+      <li><a href="/our_team">About Trio-Trashy</a></li>      
+  
+    </ul>
+  </div>
+
+  <div class="simple-content">
+    <h1>Project Dashboard</h1>
+    
+    <div class="dashboard-grid">
+
+      <div class="chart-card grid-span-all">
+        <h3>About The Project</h3>
+        <p>This project uses a TensorFlow Lite model to classify waste images in real-time.</p>
+        <p>The system is built with a **Flask (Python)** backend to serve the model and a **React-inspired JavaScript** frontend for the user interface.</p>
+        <p>Our goal is to promote proper recycling and reduce environmental impact through accessible AI.</p>
+      </div>
+
+      <div class="chart-card">
+        <h3>Training vs Validation Loss</h3>
+        <canvas id="lossChart"></canvas>
+      </div>
+
+      <div class="chart-card">
+        <h3>Training vs Validation Accuracy</h3>
+        <canvas id="accuracyChart"></canvas>
+      </div>
+
+      <div class="chart-card">
+        <h3>Learning Rate Schedule</h3>
+        <canvas id="lrChart"></canvas>
+      </div>
+      
+      <div class="chart-card">
+        <h3>Model Accuracy (Training)</h3>
+        <canvas id="lineChart"></canvas>
+      </div>
+
+      <div class="chart-card">
+        <h3>Waste Type Distribution</h3>
+        <canvas id="donutChart"></canvas>
+      </div>
+      
+      <div class="chart-card">
+        <h3>Bin Classification Results</h3>
+        <canvas id="barChart"></canvas>
+      </div>
+      
+      
+
+    </div>
+  </div>
+  <div class="footer">
+    &copy; 2025 AI Waste Classification System.<br>
+    Bringing AI to sustainability for a cleaner, greener planet.<br>
+    - Developed & Designed by Group 2 - AIS Semester 3, Year 2025
+  </div>
+
+  <script>
+    (function() {
+      // --- Set Chart.js defaults for dark theme ---
+      Chart.defaults.color = '#9E9E9E'; 
+      // =============================
+      
+      Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
+
+      // === 1. Line Chart ===
+      const ctxLine = document.getElementById('lineChart').getContext('2d');
+      new Chart(ctxLine, {
+        type: 'line',
+        data: {
+          labels: ['Epoch 1', 'Epoch 5', 'Epoch 10', 'Epoch 15', 'Epoch 20', 'Epoch 25', 'Epoch 30'],
+          datasets: [{
+            label: 'Accuracy',
+            data: [65.2,70.2, 78.5, 85.1, 90.3, 92.5,94.7],
+            borderColor: 'var(--primary)',
+            backgroundColor: 'rgba(33, 200, 122, 0.1)',
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: { display: false }
+          },
+          scales: {
+            y: {
+              min: 50,
+              max: 100,
+              ticks: { callback: (value) => value + '%' }
+            }
+          }
+        }
+      });
+
+      // === 2. Donut Chart ===
+      const ctxDonut = document.getElementById('donutChart').getContext('2d');
+      new Chart(ctxDonut, {
+        type: 'doughnut',
+        data: {
+          labels: ['Cardboard', 'Food Organics', 'Glass', 'Metal', 'Miscellaneous Trash', 'Paper', 'Plastic', 'Textile Trash', 'Vegetation'],
+          datasets: [{
+            label: 'Waste Types',
+            data: [30, 25, 18, 12, 10, 5, 30, 8, 7],
+            backgroundColor: [
+              'var(--success)', 
+              'var(--muted)',
+              'var(--accent)',
+              'var(--danger)',
+              '#9E9E9E',
+              '#607D8B'
+            ],
+            borderWidth: 0,
+            hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                padding: 15,
+                boxWidth: 12
+              }
+            }
+          }
+        }
+      });
+
+      // === 3. Bar Chart ===
+      const ctxBar = document.getElementById('barChart').getContext('2d');
+      new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+          labels: ['Recyclable', 'Hazardous', 'Food', 'Residual'],
+          datasets: [{
+            label: 'Items Classified',
+            data: [142, 88, 51, 70],
+            backgroundColor: [
+              'var(--primary)',
+              'var(--danger)',
+              'var(--accent)',
+              'var(--muted)'
+            ],
+            borderRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          indexAxis: 'y',
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: { grid: { display: false } }
+          }
+        }
+      });
+
+
+      // === 4. LOSS CHART ===
+      const ctxLoss = document.getElementById('lossChart').getContext('2d');
+      
+      // Create labels for Epochs 1 to 32
+      const epochLabels = Array.from({ length: 32 }, (_, i) => i + 1);
+      
+      // Data extracted from your reference image
+      const trainingLossData = [
+        2.4, 1.3, 0.9, 0.6, 0.35, 0.28, 0.2, 0.15, 0.12, 0.1, 0.08, 0.06, 
+        0.05, 0.04, 0.03, 0.02, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 
+        0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01
+      ];
+      const validationLossData = [
+        3.8, 4.6, 5.9, 4.8, 2.4, 1.2, 1.1, 1.15, 1.2, 1.25, 1.7, 1.2, 
+        1.15, 1.15, 1.2, 1.25, 1.2, 1.15, 1.2, 1.15, 1.1, 1.15, 1.1, 
+        1.1, 1.2, 1.2, 1.15, 1.15, 1.15, 1.15, 1.15, 1.15
+      ];
+      
+      new Chart(ctxLoss, {
+        type: 'line',
+        data: {
+          labels: epochLabels,
+          datasets: [
+            {
+              label: 'Training Loss',
+              data: trainingLossData,
+              borderColor: '#3b82f6', // Blue color
+              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+              tension: 0.1,
+              pointStyle: 'circle',
+              pointBackgroundColor: '#3b82f6'
+            },
+            {
+              label: 'Validation Loss',
+              data: validationLossData,
+              borderColor: '#f97316', // Orange color
+              backgroundColor: 'rgba(249, 115, 22, 0.1)',
+              tension: 0.1,
+              pointStyle: 'rect',
+              pointBackgroundColor: '#f97316'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top', // Show legend like in the image
+              align: 'end'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 6.5, // Set max to see the spike
+              title: {
+                display: true,
+                text: 'Loss'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Epoch'
+              },
+              // Show fewer labels on x-axis to avoid clutter
+              ticks: {
+                callback: function(value, index, values) {
+                  return (index % 5 === 0) ? this.getLabelForValue(value) : '';
+                }
+              }
+            }
+          }
+        }
+      }); 
+
+
+      // === 5. ACCURACY CHART ===
+      const ctxAccuracy = document.getElementById('accuracyChart').getContext('2d');
+      
+      // Data extracted from your reference image
+      const trainingAccuracyData = [
+        0.41, 0.42, 0.56, 0.68, 0.77, 0.82, 0.89, 0.91, 0.93, 0.94, 0.95, 0.96, 
+        0.97, 0.97, 0.98, 0.98, 0.98, 0.98, 0.99, 0.99, 0.99, 0.99, 0.99, 
+        0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99
+      ];
+      const validationAccuracyData = [
+        0.09, 0.09, 0.1, 0.25, 0.39, 0.62, 0.66, 0.68, 0.69, 0.67, 0.66, 0.65, 
+        0.71, 0.71, 0.71, 0.71, 0.71, 0.72, 0.72, 0.73, 0.73, 0.72, 0.71, 
+        0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.71
+      ];
+      
+      new Chart(ctxAccuracy, {
+        type: 'line',
+        data: {
+          labels: epochLabels,
+          datasets: [
+            {
+              label: 'Training Accuracy',
+              data: trainingAccuracyData,
+              borderColor: '#3b82f6', // Blue color
+              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+              tension: 0.1,
+              pointStyle: 'circle',
+              pointBackgroundColor: '#3b82f6'
+            },
+            {
+              label: 'Validation Accuracy',
+              data: validationAccuracyData,
+              borderColor: '#f97316', // Orange color
+              backgroundColor: 'rgba(249, 115, 22, 0.1)',
+              tension: 0.1,
+              pointStyle: 'rect',
+              pointBackgroundColor: '#f97316'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top', align: 'end' }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 1.05, // Max Y-axis at 1.05 (just over 1.0)
+              title: {
+                display: true,
+                text: 'Accuracy'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Epoch'
+              },
+              ticks: {
+                callback: function(value, index, values) {
+                  // Show labels for epochs 0, 5, 10, 15...
+                  return (index % 5 === 0) ? this.getLabelForValue(value) : '';
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // === 6. NEW LEARNING RATE CHART ===
+      const ctxLr = document.getElementById('lrChart').getContext('2d');
+      
+      // Data from your image:
+      const lrData = [
+        ...Array(13).fill(0.00010),  // Epochs 1-13
+        ...Array(6).fill(0.00005),   // Epochs 14-19
+        ...Array(7).fill(0.000025),  // Epochs 20-26
+        ...Array(3).fill(0.000012),  // Epochs 27-29
+        ...Array(3).fill(0.00001)    // Epochs 30-32
+      ];
+
+      new Chart(ctxLr, {
+        type: 'line',
+        data: {
+          labels: epochLabels,
+          datasets: [
+            {
+              label: 'Learning Rate',
+              data: lrData,
+              borderColor: '#a855f7', // Purple color
+              stepped: true, // This creates the blocky "step" look
+              pointStyle: false, // No dots on the line
+              tension: 0.1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top', align: 'end' }
+          },
+          scales: {
+            y: {
+              title: {
+                display: true,
+                text: 'Learning Rate'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Epoch'
+              },
+              ticks: {
+                callback: function(value, index, values) {
+                  return (index % 5 === 0) ? this.getLabelForValue(value) : '';
+                }
+              }
+            }
+          }
+        }
+      });
+
+    })();
+  </script>
+
+</body>
+</html>
