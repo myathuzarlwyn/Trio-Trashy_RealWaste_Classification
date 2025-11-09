@@ -7,7 +7,7 @@ import tensorflow as tf
 from PIL import Image, ImageTk, ImageOps
 
 app = Flask(__name__)
-CORS(app)
+CORS(app) 
 
 # Load model
 interpreter = tf.lite.Interpreter(model_path="real_waste_cnn_model.tflite")
