@@ -45,7 +45,7 @@ function startCamera(videoId, facingMode = "environment") {
 //     const formData = new FormData();
 //     formData.append('image', uploadedImage);
 
-//     fetch('https://waste-segregation-i0xi.onrender.com/predict', {
+//     fetch('https://trio-trashy-realwaste-classification.onrender.com/predict', {
 //     method: 'POST',
 //     body: formData
 //     })
@@ -77,7 +77,7 @@ function captureImage() {
     canvas.toBlob(blob => {
     const formData = new FormData();
     formData.append('image', blob, 'capture.jpg');
-    fetch('https://waste-segregation-i0xi.onrender.com/predict', {
+    fetch('https://trio-trashy-realwaste-classification.onrender.com/predict', {
         method: 'POST',
         body: formData
     })
@@ -133,7 +133,7 @@ function sendFrame() {
         resultBox.innerHTML = `<span style="color:var(--primary);"><i class="fa fa-spinner fa-spin"></i> Detecting...</span>`;
         firstRun = false;
         }
-        fetch('https://waste-segregation-i0xi.onrender.com/predict', {
+        fetch('https://trio-trashy-realwaste-classification.onrender.com/predict', {
         method: 'POST',
         body: formData
         })

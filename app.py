@@ -4,7 +4,7 @@ import numpy as np
 import os
 import cv2
 import tensorflow as tf
-from PIL import Image, ImageTk, ImageOps
+from PIL import Image, ImageOps
 
 app = Flask(__name__)
 CORS(app) 

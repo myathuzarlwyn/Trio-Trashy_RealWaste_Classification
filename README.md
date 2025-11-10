@@ -65,16 +65,13 @@ This project merges **technology** and **ecology** — making smart waste dispos
 
 ## 🚀 Project Demonstration
 
-- 🌐 Web Demo: [https://eco-classify-vision-ivory.vercel.app/](https://eco-classify-vision-ivory.vercel.app/)
-
+- 🌐 Web Demo: [https://trio-trashy-realwaste-classification.onrender.com/](https://trio-trashy-realwaste-classification.onrender.com/)
 
 ---
 
 ## 📂 References:
 
 - **Dataset**: [Garbage Classification - 9-Classes on Kaggle](https://www.kaggle.com/datasets/joebeachcapital/realwaste/data)
----
-
 
 ---
 
