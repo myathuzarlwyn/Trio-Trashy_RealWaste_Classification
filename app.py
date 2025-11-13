@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app) 
 
 # Load model
-interpreter = tf.lite.Interpreter(model_path="real_waste_cnn_model.tflite")
+interpreter = tf.lite.Interpreter(model_path="real_waste_cnn_model_14Nov.tflite")
 interpreter.allocate_tensors()
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
