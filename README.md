@@ -26,7 +26,7 @@
 - 2 = Food
 - 3 = Residual
 
-The model is trained using image data and deployed with **OpenCV** and **TensorFlow Lite** for real-time classification, all running on **low-cost consumer devices** without special hardware. 
+The model is trained using image data and deployed with **TensorFlow Lite** for real-time classification, all running on **low-cost consumer devices** without special hardware. 
 The project promotes proper recycling, reduces pollution, and supports a cleaner environment.
 
 ---
@@ -91,7 +91,7 @@ This project merges **technology** and **ecology** — making smart waste dispos
 
 ## 👨‍💼👨‍💻👨‍💼 Team (Group2_AIS)
 
-- 👨‍💼 **Mya Thuzar Lwyn** (Team Lead) – [LinkedIn](https://www.linkedin.com/in/myathuzarlwyn/)  
+- 👨‍💼 **Mya Thuzar Lwyn** – [LinkedIn](https://www.linkedin.com/in/myathuzarlwyn/)  
 - 👩‍💻 **Ei Shwe Yi Cho Oo** – [LinkedIn](https://www.linkedin.com/in/eishweyichooo/)  
 - 👨‍💻 **Mimi Zhou** – [LinkedIn](https://www.linkedin.com/in/mimi-zhou-a952716b/) 
 
