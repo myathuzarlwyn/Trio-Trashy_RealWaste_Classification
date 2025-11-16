@@ -8,7 +8,6 @@
 
 **Trio-Trashy: Real Waste Classification System** addresses the growing challenge of improper waste disposal by providing a smart, affordable, and scalable solution. Using a simple webcam and a deep learning model, the system can identify waste items in **nine categories**:
 
-
 # --- Waste Labels ---
 - 0: 🔁 Cardboard
 - 1: 🍌 Food Organics
@@ -26,7 +25,7 @@
 - 2 = Food
 - 3 = Residual
 
-The model is trained using image data and deployed with **OpenCV** and **TensorFlow Lite** for real-time classification, all running on **low-cost consumer devices** without special hardware. 
+The model is trained using image data and deployed with **TensorFlow Lite** for real-time classification, all running on **low-cost consumer devices** without special hardware. 
 The project promotes proper recycling, reduces pollution, and supports a cleaner environment.
 
 ---
@@ -57,7 +56,7 @@ Our mission is to bring **Real waste classification** to the masses using access
 
 ## ✅ Conclusion
 
-**Trio-Trashy** shows that **AI-based waste segregation is not just possible, but practical**. By using **transfer learning** and **TensorFlow Lite**, we built a system that runs efficiently in **real-time** on common devices. It encourages **public participation**, can be **easily scaled in low-resource regions**, and supports **sustainable living**.
+**Trio-Trashy** shows that **Machine Learning based waste segregation is not just possible, but practical**. By using **transfer learning** and **TensorFlow Lite**, we built a system that runs efficiently in **real-time** on common devices. It encourages **public participation**, can be **easily scaled in low-resource regions**, and supports **sustainable living**.
 
 This project merges **technology** and **ecology** — making smart waste disposal an everyday reality.
 
@@ -91,7 +90,7 @@ This project merges **technology** and **ecology** — making smart waste dispos
 
 ## 👨‍💼👨‍💻👨‍💼 Team (Group2_AIS)
 
-- 👨‍💼 **Mya Thuzar Lwyn** (Team Lead) – [LinkedIn](https://www.linkedin.com/in/myathuzarlwyn/)  
+- 👨‍💼 **Mya Thuzar Lwyn** – [LinkedIn](https://www.linkedin.com/in/myathuzarlwyn/)  
 - 👩‍💻 **Ei Shwe Yi Cho Oo** – [LinkedIn](https://www.linkedin.com/in/eishweyichooo/)  
 - 👨‍💻 **Mimi Zhou** – [LinkedIn](https://www.linkedin.com/in/mimi-zhou-a952716b/) 
 
