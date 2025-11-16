@@ -4,42 +4,27 @@
   <meta charset="UTF-8">
   <title>About Trio Trashy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet"> 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="static/styles.css"> 
   
   <style>
-    /* === Your Existing Styles === */
-    :root {
-      --primary: #21c87a;
-      --primary-dark: #1a2b3a;
-      --secondary: #232b3b;
-      --accent: #ffd600;
-      --card-bg: #232b3b;
-      --tab-bg: #1a2233;
-      --text: #fff;
-      --muted: #b0b8c1;
-      --success: #21c87a;
-      --danger: #ff5252;
+       
+    h2, p {
+      margin: 0px;
     }
 
-    body {
-      font-family: 'Roboto', Arial, sans-serif;
-      background: linear-gradient(135deg, #1a2b3a 0%, #23404a 100%);
-      margin: 0;
-      padding: 0;
-      color: var(--text);
-      min-height: 100vh;
-    }
-    
-    h2, p {
-      margin: 10px;
+    .nav-container {
+      display: flex;
+      justify-content: center; /* Centers the <ul> horizontally */
+      background: var(--tab-bg); /* Apply background to the full bar */
     }
 
     ul {
       list-style-type: none;
       margin: 0;
       padding: 0;
-      background: var(--tab-bg);
+      /* background: var(--tab-bg); */ /* <-- This was moved to .nav-container */
       display: flex;
     }
 
@@ -48,6 +33,12 @@
       color: white;
       padding: 14px 16px;
       text-decoration: none;
+      margin: 5 0 0 0;
+    }
+
+    /* Add spacing between menu items */
+    .nav-container > ul > li {
+        margin: 0 16px; /* Adds 16px space on left/right (increased from 8px) */
     }
 
     ul li a:hover:not(.active) {
@@ -84,8 +75,7 @@
       padding: 18px 0 12px 0;
     }
 
-    /* === TEAM LAYOUT STYLES === */
-    
+    /* === UPDATED TEAM LAYOUT STYLES === */    
     .team-container {
       display: flex;
       flex-wrap: wrap; /* Allows stacking on small screens */
@@ -95,13 +85,16 @@
     }
 
     .team-card {
-    background: #233945;
-    border-radius: 18px;
-    padding: 20px;
-    text-align: center;
-    width: 250px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
+      /* This green is sampled from your image */
+      background: #465945; 
+      border-radius: 18px;
+      padding: 0; /* Padding removed from here */
+      text-align: left; /* Changed from center */
+      width: 100%;
+      max-width: 340px; /* Made cards slightly wider for content */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+      overflow: hidden; /* New: ensures image stays within rounded corners */
    } 
     
     .team-card:hover {
@@ -111,28 +104,69 @@
 
     .team-card img {
       width: 100%;
-      height: 230px; /* Give a fixed height */
-      object-fit: cover; /* Cover the area, cropping as needed */
-      object-position: center; /* Focus on the center (good for faces) */
-      border-radius: 12px; /* Rounded corners for the image */
-      margin-bottom: 16px;
+      height: 450px; /* Changed from fixed 230px */
+      aspect-ratio: 9 / 16; /* Added for consistent image shape like your sample */
+      object-fit: cover; 
+      object-position: center; 
+      display: block; /* New: removes any bottom space */
+      background-color: #333; /* Added a background color while images load */
+      /* Removed border-radius and margin-bottom */
+    }
+    
+    /* New content wrapper for padding */
+    .team-card-content {
+      padding: 20px;
     }
 
-    .team-card h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--primary); /* Use theme's primary color, like the reference */
-      margin: 0 0 8px 0;
+    .team-card-content h3 {
+      font-size: 1.75rem; /* Larger font */
+      font-weight: 700;
+      color: white; /* Changed from var(--primary) */
+      margin: 0 0 12px 0;
     }
 
-    .team-card p {
+    /* New styles for the detail list */
+    .team-card-content ul {
+      list-style-type: square;
+      margin: 0 0 0 20px; /* Indent list */
+      padding: 0;
+      background: transparent; /* Override nav 'ul' style */
+      display: block; /* Override nav 'ul' style */
+    }
+
+    .team-card-content li {
       font-size: 0.95rem;
-      color: var(--muted); /* Use theme's muted text color */
+      color: white;
       line-height: 1.5;
-      margin: 0;
+      margin-bottom: 8px;
+    }
+    
+    .team-card-content li:last-child {
+      margin-bottom: 0;
+    }
+    
+    /* New styles for the link */
+    .team-card-content a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline; /* Override nav 'a' style */
+      padding: 0; /* Override nav 'a' style */
+    }
+    
+    .team-card-content a:hover {
+      text-decoration: underline;
+      background: transparent; /* Override nav 'a' style */
+    }
+    
+    .team-card-content .fab.fa-linkedin {
+      color: white;
+      font-size: 1.1rem;
+      margin-right: 5px;
+      vertical-align: middle;
     }
 
-  </style>
+  </style> 
  
 </head>
 <body>
@@ -145,33 +179,58 @@
   </div>
 
   <div class="simple-content">
-    <h1> | Meet The Awesome Team</h1>
+    <h1> <i class="fa-solid fa-leaf fa-xs" style="color:#21c87a;"></i> Meet The Awesome Team</h1>
     
     <div class="team-container">      
+      
       <div class="team-card">
-        <img src="\static\images\mimi_LinkedIn.jpg" alt="Mimi">
-        <h3>Mimi Zhou (Mimi)</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      </div>
-          
+        <img src="\static\images\Mimi_ProfilePhoto.jpg" alt="Mimi">
+        <div class="team-card-content">
+          <h3>Mimi Zhou (Mimi)</h3>
+          <p>Tech student diving into Data, AI & Machine Learning</p><br/>
+          <ul>            
+            <li>Background in project coordination, search evaluation & tech support </li>
+            <li>Always learning something — new tools, new ideas, new ways to build smarter systems</li>
+            <li>Loves hiking, tennis, good coffee, and planning the next adventure</li>
+            <li>Connect: <a href="https://www.linkedin.com/in/mimi-zhou-a952716b/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i> Mimi Zhou (Mimi)</a></li>   
+          </ul>
+        </div>
+      </div>          
       <div class="team-card">
-        <img src="\static\images\ei_LinkedIn.jpg" alt="Ei">
-        <h3>Ei Shwe Yi Cho Oo (Erika)</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <img src="\static\images\Ei_ProfilePhoto.jpg" alt="Erika">
+        <div class="team-card-content">
+          <h3>Ei Shwe Yi Cho Oo (Erika)</h3>
+          <p> Short description</p><br/>
+          <ul>
+            <li>Role or Title</li>
+            <li>Detail about professional interests or skills.</li>
+            <li>Hobbies: Hobby 1, Hobby 2</li>
+            <li>Fun Fact: A fun fact goes here.</li>
+            <li>Connect: <a href="https://www.linkedin.com/in/eishweyichooo" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i> Ei Shwe Yi Cho Oo</a></li>
+          </ul>
+        </div>
       </div>
 
       <div class="team-card">
-        <img src="\static\images\mia_LinkedIn.jpg" alt="Mia">
-        <h3>Mya Thuzar Lwyn (Mia)</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <img src="\static\images\Mia_ProfilePhoto2.jpg" alt="Mia">
+        <div class="team-card-content">
+          <h3>Mia</h3>
+          <p>A lifelong learning IT Technologist who is driven by a love for data, solving problems &amp; aspiring AI/ML Engineer.</p><br/>
+          <ul>            
+            <li>Loves: Programming, Passionate about Data, AI/ML. </li>
+            <li>Hobbies: Learning new tech things, music &amp; food</li>
+            <li>Fun Fact: Small food portions make me nervous <i class="fa-regular fa-face-laugh-squint"></i> </li>
+            <li>Connect: <a href="https://www.linkedin.com/in/myathuzarlwyn" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i> Mya Thuzar Lwyn (Mia)</a></li>
+          </ul>
+        </div>
       </div>
 
     </div>
   </div>
   <div class="footer">
-    &copy; 2025 AI Waste Classification System.<br>
-    Bringing AI to sustainability for a cleaner, greener planet.<br>
-    - Developed & Designed by Group 2 - AIS Semester 3, Year 2025
+    &copy; 2025 Real Waste Classification System.<br>
+    Bringing Machine Learning to sustainability for a cleaner, greener planet.<br>
+    <i class="fa-solid fa-braille fa-sm" style="color: #06b259;"></i> Developed & Designed by Trio-Trashy Team - AIS Semester 3, Year 2025
   </div>
 </body>
 </html>

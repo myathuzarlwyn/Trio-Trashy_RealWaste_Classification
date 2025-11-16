@@ -10,7 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
   <style>
-    /* === Your Existing Styles === */
+    
     :root {
       --primary: #21c87a;
       --primary-dark: #1a2b3a;
@@ -35,24 +35,37 @@
     h2, p {
       margin: 10px;
     }
+    
+    .nav-container {
+      display: flex;
+      justify-content: center; /* Centers the <ul> horizontally */
+      background: var(--tab-bg); /* Apply background to the full bar */
+    }
 
-    /* Your existing nav styles */
     ul {
       list-style-type: none;
       margin: 0;
       padding: 0;
-      background: var(--tab-bg);
+      /* background: var(--tab-bg); */ /* <-- This was moved to .nav-container */
       display: flex;
     }
+
     ul li a {
       display: block;
       color: white;
       padding: 14px 16px;
       text-decoration: none;
     }
+
+    /* Add spacing between menu items */
+    .nav-container > ul > li {
+        margin: 0 16px; /* Adds 16px space on left/right (increased from 8px) */
+    }
+
     ul li a:hover:not(.active) {
       background: var(--secondary);
     }
+
     ul li a.active {
       background-color: #04AA6D;
     }
@@ -77,7 +90,7 @@
 
     .dashboard-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); 
         gap: 24px;
     }
 
@@ -119,17 +132,15 @@
     <ul>
       <li><a href="/">Home</a></li>      
       <li><a class="active" href="/about_project">Our Project</a></li> 
-      <li><a href="/our_team">About Trio-Trashy</a></li>      
-  
+      <li><a href="/our_team">About Trio-Trashy</a></li>  
     </ul>
   </div>
 
-  <div class="simple-content">
-    <h1>Project Dashboard</h1>
-    
+  <div class="simple-content">    
     <div class="dashboard-grid">
-
       <div class="chart-card grid-span-all">
+        <h1><i class="fa-solid fa-chart-line fa-sm" style="color:#21c87a;"></i>  Project Dashboard</h1><br/>
+
         <h3>About The Project</h3>
         <p>This project uses a TensorFlow Lite model to classify waste images in real-time.</p>
         <p>The system is built with a **Flask (Python)** backend to serve the model and a **React-inspired JavaScript** frontend for the user interface.</p>
@@ -171,9 +182,9 @@
     </div>
   </div>
   <div class="footer">
-    &copy; 2025 AI Waste Classification System.<br>
-    Bringing AI to sustainability for a cleaner, greener planet.<br>
-    - Developed & Designed by Group 2 - AIS Semester 3, Year 2025
+    &copy; 2025 Real Waste Classification System.<br>
+    Bringing Machine Learning to sustainability for a cleaner, greener planet.<br>
+    <i class="fa-solid fa-braille fa-sm" style="color: #06b259;"></i>  Developed & Designed by Trio-Trashy Team - AIS Semester 3, Year 2025
   </div>
 
   <script>

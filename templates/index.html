@@ -8,14 +8,20 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
     h2, p {
-      margin: 10px;
+      margin: 0px;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: center; /* Centers the <ul> horizontally */
+      background: var(--tab-bg); /* Apply background to the full bar */
     }
 
     ul {
       list-style-type: none;
       margin: 0;
       padding: 0;
-      background: var(--tab-bg);
+      /* background: var(--tab-bg); */ /* <-- This was moved to .nav-container */
       display: flex;
     }
 
@@ -26,9 +32,13 @@
       text-decoration: none;
     }
 
+    /* Add spacing between menu items */
+    .nav-container > ul > li {
+        margin: 0 16px; /* Adds 16px space on left/right (increased from 8px) */
+    }
+
     ul li a:hover:not(.active) {
       background: var(--secondary);
-      /* background-color: #111111; */
     }
 
     ul li a.active {
@@ -62,7 +72,7 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
     .logo {
-      font-size: 2rem;
+      font-size: 1.9rem;
       font-weight: bold;
       color: var(--primary);
       display: flex;
@@ -81,11 +91,11 @@
     }
     .badge {
       display: inline-block;
-      background: var(--primary);
+      /* background: var(--card-bg); */
       color: #fff;
-      border-radius: 20px;
+      border-radius: 5px;
       padding: 6px 18px;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       margin-bottom: 18px;
       font-weight: 500;
       letter-spacing: 0.5px;
@@ -298,12 +308,10 @@
 
   <div class="header">
     <div class="logo">
-      <i class="fa-solid fa-recycle"></i> Real Waste Classification System<span></span>
+       <i class="fa-solid fa-clover fa-rotate-by fa-lg" style="color:#1bb16a;; --fa-rotate-angle: 150deg;"></i> Real Waste Classification System
     </div>
-    <div class="badge">Using Machine Learning to automatically classify waste into recyclable categories, promoting sustainability and efficient recycling.</div>
-    <!-- <div class="subtitle">
-      Using Machine Learning to automatically classify waste into recyclable categories, promoting sustainability and efficient recycling.
-    </div> -->
+    <div class="badge feature-desc"> Using Machine Learning to automatically classify waste into recyclable categories, promoting sustainability and efficient recycling. </div>
+    <div class="subtitle"></div> 
     <div class="features">
       <div class="feature-card">
         <i class="fa-solid fa-camera"></i>
@@ -317,7 +325,7 @@
       </div>
       <div class="feature-card">
         <i class="fa-solid fa-brain"></i>
-        <div class="feature-title">AI-Powered</div>
+        <div class="feature-title">Live Detection</div>
         <div class="feature-desc">Deep learning model trained to recognize waste types.</div>
       </div>
     </div>
@@ -405,9 +413,9 @@
   </div>
 
   <div class="footer">
-    &copy; 2025 AI Waste Classification System.<br>
-    Bringing AI to sustainability for a cleaner, greener planet.<br>
-    - Developed & Designed by Group 2 - AIS Semester 3, Year 2025
+    &copy; 2025 Real Waste Classification System.<br>
+    Bringing Machine Learning to sustainability for a cleaner, greener planet.<br>
+    <i class="fa-solid fa-braille fa-sm" style="color: #06b259;"></i> Developed & Designed by Trio-Trashy Team - AIS Semester 3, Year 2025
   </div>
   <script>
 
@@ -769,129 +777,6 @@
         handleUpload({ files });
       }
     });
-
-    // // Start camera when tab is opened
-    // document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
-    //   btn.addEventListener('click', () => {
-    //     if (btn.textContent.includes('Webcam')) startCamera("camera", currentFacingMode);
-    //     if (btn.textContent.includes('Live')) startCamera("realtimeCamera", currentFacingMode);
-    //     if (btn.textContent.includes('Upload') && stream) stream.getTracks().forEach(track => track.stop());
-    //   });
-    // });
-  //   function startLiveDetection() {
-  //   const video = document.getElementById("realtimeCamera");
-  //   liveDetectionActive = true;
-  //   const resultBox = document.getElementById("realtimeResultText");
-  //   let firstRun = true;
-
-  //   function sendFrame() {
-  //     if (!liveDetectionActive) return;
-  //     if (video.readyState === 4) {
-  //       const canvas = document.createElement("canvas");
-  //       canvas.width = video.videoWidth;
-  //       canvas.height = video.videoHeight;
-  //       canvas.getContext("2d").drawImage(video, 0, 0);
-  //       canvas.toBlob(blob => {
-  //         const formData = new FormData();
-  //         formData.append('image', blob, 'frame.jpg');
-  //         if (firstRun) {
-  //           resultBox.innerHTML = `<span style="color:var(--primary);"><i class="fa fa-spinner fa-spin"></i> Detecting...</span>`;
-  //           firstRun = false;
-  //         }
-  //         fetch('/predict', {
-  //           method: 'POST',
-  //           body: formData
-  //         })
-  //           .then(res => res.json())
-  //           .then(data => {
-  //             let result = data.result || data.prediction;
-  //             if (!result) result = "No prediction received.";
-  //             resultBox.innerHTML = `<span style="color:var(--success);">${result}</span>`;
-  //             setTimeout(sendFrame, 1200);
-  //           })
-  //           .catch(() => {
-  //             resultBox.innerHTML = `<span style="color:var(--danger);">Prediction failed.</span>`;
-  //             setTimeout(sendFrame, 2000);
-  //           });
-  //       }, "image/jpeg");
-  //     } else {
-  //       setTimeout(sendFrame, 600);
-  //     }
-  //   }
-  //   sendFrame();
-  // }
-
-  
-    // function processImage() {
-    //   if (!uploadedImage) {
-    //     document.getElementById('segmentationContent').innerText = "Please upload an image first.";
-    //     return;
-    //   }
-    //   document.getElementById('segmentationContent').innerHTML = `<span style="color:var(--primary);"><i class="fa fa-spinner fa-spin"></i> Processing...</span>`;
-    //   const formData = new FormData();
-    //   formData.append('image', uploadedImage);
-
-    //   fetch('/predict', {
-    //     method: 'POST',
-    //     body: formData
-    //   })
-    //     .then(res => res.json())
-    //     .then(data => {
-    //       // Before
-    //       // document.getElementById('segmentationContent').innerHTML = `<span style="color:var(--success);">${data.result || data.bin_path}</span>`;
-
-    //       // After: Enhanced to show an image
-    //       document.getElementById('segmentationTitle').innerHTML = ''          
-    //       document.getElementById('segmentationContent').innerHTML = data.bin_path
-    //         ? `<span style="color:var(--success);">${data.result || 'Result of the waste image:: ' + data.waste_type + '</br>' + 'Confidence: ' + data.confidence }</span> </br></br> <img src="${data.bin_path}" alt="Waste Classification Result" style="max-width: 50%; height: auto; border-radius: 4px;">`
-    //         : `<span style="color:var(--success);">${data.result || data.waste_type}</span>`;
-
-    //       // Result of the waste image: {predicted_label} (Confidence: {confidence:.2f}
-    //     })
-    //     .catch(() => {
-    //       // alert(data.result)
-    //       document.getElementById('segmentationContent').innerHTML = `<span style="color:var(--danger);">Prediction failed. Try again...!!!</span>`;
-    //     });
-    // }
-
-  //   function captureImage() {
-  //   const video = document.getElementById("camera");
-  //   const captureBtn = document.querySelector('#captureTab .upload-label');
-  //   captureBtn.disabled = true;
-  //   captureBtn.style.opacity = 0.6;
-
-  //   const canvas = document.createElement("canvas");
-  //   canvas.width = video.videoWidth;
-  //   canvas.height = video.videoHeight;
-  //   canvas.getContext("2d").drawImage(video, 0, 0);
-
-  //   const imgDataUrl = canvas.toDataURL("image/jpeg");
-  //   document.getElementById("capturedImageText").innerHTML = `<img src="${imgDataUrl}" style="max-width:120px;border-radius:8px;">`;
-  //   document.getElementById("captureResultText").innerHTML = `<span style="color:var(--primary);"><i class="fa fa-spinner fa-spin"></i> Processing...</span>`;
-
-  //   canvas.toBlob(blob => {
-  //     const formData = new FormData();
-  //     formData.append('image', blob, 'capture.jpg');
-  //     fetch('/predict', {
-  //       method: 'POST',
-  //       body: formData
-  //     })
-  //       .then(res => res.json())
-  //       .then(data => {
-  //         let result = data.result || data.prediction;
-  //         if (!result) result = "No prediction received.";
-  //         document.getElementById("captureResultText").innerHTML = `<span style="color:var(--success);">${result}</span>`;
-  //       })
-  //       .catch(() => {
-  //         document.getElementById("captureResultText").innerHTML = `<span style="color:var(--danger);">Prediction failed. Try again.</span>`;
-  //       })
-  //       .finally(() => {
-  //         captureBtn.disabled = false;
-  //         captureBtn.style.opacity = 1;
-  //       });
-  //   }, "image/jpeg");
-  // }
-    // ...existing code...
 
   </script>
 </body>
