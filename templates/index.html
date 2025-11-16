@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Real Waste Classification System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    h2, p {
+      margin: 0px;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: center; /* Centers the <ul> horizontally */
+      background: var(--tab-bg); /* Apply background to the full bar */
+    }
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      /* background: var(--tab-bg); */ /* <-- This was moved to .nav-container */
+      display: flex;
+    }
+
+    ul li a {
+      display: block;
+      color: white;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    /* Add spacing between menu items */
+    .nav-container > ul > li {
+        margin: 0 16px; /* Adds 16px space on left/right (increased from 8px) */
+    }
+
+    ul li a:hover:not(.active) {
+      background: var(--secondary);
+    }
+
+    ul li a.active {
+      background-color: #04AA6D;
+    }
+
+    :root {
+      --primary: #21c87a;
+      --primary-dark: #1a2b3a;
+      --secondary: #232b3b;
+      --accent: #ffd600;
+      --card-bg: #232b3b;
+      --tab-bg: #1a2233;
+      --text: #fff;
+      --muted: #b0b8c1;
+      --success: #21c87a;
+      --danger: #ff5252;
+    }
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background: linear-gradient(135deg, #1a2b3a 0%, #23404a 100%);
+      margin: 0;
+      padding: 0;
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .header {
+      background: var(--secondary);
+      padding: 32px 0 24px 0;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .logo {
+      font-size: 1.9rem;
+      font-weight: bold;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .logo span {
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .tagline {
+      margin: 18px 0 0 0;
+      font-size: 1.1rem;
+      color: var(--muted);
+    }
+    .badge {
+      display: inline-block;
+      /* background: var(--card-bg); */
+      color: #fff;
+      border-radius: 5px;
+      padding: 6px 18px;
+      font-size: 0.85rem;
+      margin-bottom: 18px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    .main-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin: 0 0 10px 0;
+      color: #fff;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-bottom: 32px;
+    }
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin: 32px 0 0 0;
+      flex-wrap: wrap;
+    }
+    .feature-card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 24px 20px;
+      width: 220px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+      color: #fff;
+      margin-bottom: 18px;
+    }
+    .feature-card i {
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    .feature-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 1.1rem;
+    }
+    .feature-desc {
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+    .container {
+      max-width: 900px;
+      margin: 38px auto 0 auto;
+      background: var(--tab-bg);
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      padding: 32px 24px 24px 24px;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.08rem;
+      padding: 12px 0;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s, color 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--card-bg);
+      color: var(--primary);
+    }
+    .tab-content {
+      display: none;
+      background: var(--card-bg);
+      border-radius: 0 0 12px 12px;
+      padding: 32px 24px 24px 24px;
+      min-height: 260px;
+      animation: fadeIn 0.7s;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .upload-area {
+      text-align: center;
+      border: 2px dashed var(--primary);
+      border-radius: 12px;
+      padding: 36px 18px;
+      background: rgba(33,200,122,0.04);
+      margin-bottom: 24px;
+    }
+    .upload-area i {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    .upload-area input[type="file"] {
+      display: none;
+    }
+    .upload-label {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 28px;
+      border-radius: 8px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: background 0.2s;
+    }
+    .upload-label:hover {
+      background: #1bb16a;
+    }
+    .upload-note {
+      color: var(--muted);
+      font-size: 0.98rem;
+      margin-top: 8px;
+    }
+    .cards-row {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .result-card {
+      flex: 1;
+      background: #1a2233;
+      border-radius: 12px;
+      padding: 24px 16px;
+      min-width: 220px;
+      min-height: 120px;
+      text-align: center;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .result-card i {
+      font-size: 2.2rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .result-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .result-content {
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+    .action-row {
+      display: flex;
+      gap: 18px;
+      justify-content: flex-end;
+      margin-top: 18px;
+    }
+    .action-btn {
+      padding: 12px 28px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .action-btn.process {
+      background: var(--success);
+      color: #fff;
+    }
+    .action-btn.process:hover {
+      background: #1bb16a;
+    }
+    .action-btn.reset {
+      background: var(--danger);
+      color: #fff;
+    }
+    .action-btn.reset:hover {
+      background: #d32f2f;
+    }
+    .footer {
+      margin-top: 48px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.98rem;
+      padding: 18px 0 12px 0;
+    }
+    @media (max-width: 900px) {
+      .features { flex-direction: column; align-items: center; }
+      .cards-row { flex-direction: column; }
+      .container { padding: 18px 4vw 18px 4vw; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+  </style>
+ 
+</head>
+<body>
+  <div class="nav-container">      
+    <ul>
+      <li><a class="active" href="/">Home</a></li>      
+      <li><a href="/about_project">Our Project</a></li> 
+      <li><a href="/our_team">About Trio-Trashy</a></li>
+    </ul>
+  </div>
+
+  <div class="header">
+    <div class="logo">
+       <i class="fa-solid fa-clover fa-rotate-by fa-lg" style="color:#1bb16a;; --fa-rotate-angle: 150deg;"></i> Real Waste Classification System
+    </div>
+    <div class="badge feature-desc"> Using Machine Learning to automatically classify waste into recyclable categories, promoting sustainability and efficient recycling. </div>
+    <div class="subtitle"></div> 
+    <div class="features">
+      <div class="feature-card">
+        <i class="fa-solid fa-camera"></i>
+        <div class="feature-title">Real-time Detection</div>
+        <div class="feature-desc">Classify waste instantly using your device's camera.</div>
+      </div>
+      <div class="feature-card">
+        <i class="fa-solid fa-leaf"></i>
+        <div class="feature-title">Eco-Friendly</div>
+        <div class="feature-desc">Promote recycling and reduce environmental impact.</div>
+      </div>
+      <div class="feature-card">
+        <i class="fa-solid fa-brain"></i>
+        <div class="feature-title">Live Detection</div>
+        <div class="feature-desc">Deep learning model trained to recognize waste types.</div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('uploadTab', this)">Upload Image</button>
+      <button class="tab-btn" onclick="showTab('captureTab', this)">Capture from Webcam</button>
+      <button class="tab-btn" onclick="showTab('liveTab', this)">Live Detection</button>
+    </div>
+
+    <!-- 1. Upload Tab -->
+    <div id="uploadTab" class="tab-content active">
+      <div class="upload-area" id="uploadDrop">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <div style="font-size:1.15rem;font-weight:600;margin-bottom:6px;">Upload Waste Image</div>
+        <div class="upload-note">Drag & drop your image here or</div>
+        <label class="upload-label">
+          Browse Files
+          <input type="file" accept="image/*" onchange="handleUpload(this)">
+        </label>
+        <div class="upload-note">Limit 20MB per file - JPG, JPEG, PNG</div>
+      </div>
+      <div class="cards-row">
+        <div class="result-card" id="uploadedImageCard">
+          <i class="fa-regular fa-image"></i>
+          <div class="result-title">Uploaded Image</div>
+          <div class="result-content" id="uploadedImageText">No image uploaded</div>
+        </div>
+        <div class="result-card" id="segmentationCard">
+          <i class="fa-regular fa-file-lines"></i>
+          <div class="result-title" id="segmentationTitle">Waste Classification Result</div>
+          <div class="result-content" id="segmentationContent">
+            Result will appear here!...
+          </div>
+        </div>
+      </div>
+      <div class="action-row">
+        <button class="action-btn process" onclick="processImage()">Classify Waste</button>
+        <button class="action-btn reset" onclick="resetUpload()">Reset</button>
+      </div>
+    </div>
+
+
+    <!-- 2. Capture Tab -->
+    <div id="captureTab" class="tab-content">
+      <div class="upload-area">
+        <i class="fa-solid fa-camera"></i>
+        <div style="font-size:1.15rem;font-weight:600;margin-bottom:6px;">Capture Waste Image</div>
+        <div class="upload-note">Use your webcam to capture a photo of your waste item.</div>
+        <video id="camera" autoplay playsinline style="margin-top:12px;max-width:100%;border-radius:10px;"></video><br>
+        <button class="upload-label" onclick="captureImage()">Capture</button>
+        <button class="upload-label" onclick="flipCamera()" style="background:var(--accent);color:#222;margin-left:10px;">Flip Camera</button>
+      </div>
+      <div class="cards-row">
+        <div class="result-card" id="capturedImageCard">
+          <i class="fa-regular fa-image"></i>
+          <div class="result-title">Captured Image</div>
+          <div class="result-content" id="capturedImageText">No image captured</div>
+        </div>
+        <div class="result-card" id="captureResultCard">
+          <i class="fa-regular fa-file-lines"></i>
+          <div class="result-title" id="segmentationTitle">Segregation Result</div>
+          <div class="result-content" id="segmentationContent">Results will appear here!...</div>
+        </div>
+      </div>      
+    </div>
+
+    <!-- 3. Live Tab -->
+    <div id="liveTab" class="tab-content">
+      <div class="upload-area">
+        <i class="fa-solid fa-video"></i>
+        <div style="font-size:1.15rem;font-weight:600;margin-bottom:6px;">Live Detection</div>
+        <div class="upload-note">Point your camera at waste items for live predictions.</div>
+        <video id="realtimeCamera" autoplay playsinline style="margin-top:12px;max-width:100%;border-radius:10px;"></video><br>
+        <button class="upload-label" onclick="flipRealtimeCamera()" style="background:var(--accent);color:#222;margin-top:10px;">Flip Camera</button>
+      </div>
+      <div class="result-card" style="margin:0 auto;">
+        <i class="fa-regular fa-file-lines"></i>
+        <div class="result-title">Live Result</div>
+        <div class="result-content" id="realtimeResultText">Results will appear here</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Real Waste Classification System.<br>
+    Bringing Machine Learning to sustainability for a cleaner, greener planet.<br>
+    <i class="fa-solid fa-braille fa-sm" style="color: #06b259;"></i> Developed & Designed by Trio-Trashy Team - AIS Semester 3, Year 2025
+  </div>
+  <script>
+
+    // Tab switching
+    function showTab(tabId, btn) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (tabId !== 'liveTab') liveDetectionActive = false;
+    }
+
+    // Upload logic
+    let uploadedImage = null;
+    function handleUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      uploadedImage = file;
+      document.getElementById('uploadedImageText').innerHTML = `<img src="${URL.createObjectURL(file)}" style="max-width:200px;border-radius:8px;">`;
+      document.getElementById('segmentationContent').innerText = "Ready to process";
+    }
+ 
+    function resetUpload() {
+      uploadedImage = null;
+      document.getElementById('uploadedImageText').innerText = "No image uploaded";
+      document.getElementById('segmentationContent').innerText = "Results will appear here";
+    }
+
+    // Webcam logic (simplified, add your backend integration as needed)
+    let stream, currentFacingMode = "environment";
+    function startCamera(videoId, facingMode = "environment") {
+      const constraints = { video: { facingMode }, audio: false };
+      navigator.mediaDevices.getUserMedia(constraints)
+        .then(s => {
+          stream = s;
+          const video = document.getElementById(videoId);
+          video.srcObject = stream;
+        });
+    } 
+
+    /**
+     * Animates an image from a start element to an end element.
+     * @param {HTMLElement} startElement - The <img> element to animate from.
+     * @param {HTMLElement} endElement - The target <div> element to animate to.
+     * @returns {Promise} - A promise that resolves when the animation is complete.
+     */
+    function animateToss(startElement, endElement) {
+      return new Promise(resolve => {
+        // 1. Get positions
+        const startRect = startElement.getBoundingClientRect();
+        const endRect = endElement.getBoundingClientRect();
+        
+        // Calculate start and end coordinates (center points)
+        const startX = startRect.left + startRect.width / 2;
+        const startY = startRect.top + startRect.height / 2;
+        const endX = endRect.left + endRect.width / 2;
+        const endY = endRect.top + endRect.height / 2;
+
+        // 2. Create the "flying" image
+        const flyingImage = document.createElement('img');
+        flyingImage.src = startElement.src;
+        flyingImage.style.position = 'fixed'; // Use fixed positioning for viewport
+        flyingImage.style.left = `${startRect.left}px`;
+        flyingImage.style.top = `${startRect.top}px`;
+        flyingImage.style.width = `${startRect.width}px`;
+        flyingImage.style.height = `${startRect.height}px`;
+        flyingImage.style.borderRadius = '8px'; // Match original style
+        flyingImage.style.zIndex = '9999';
+        flyingImage.style.border = '2px solid var(--primary)'; // Make it stand out
+        document.body.appendChild(flyingImage);
+
+        // 3. Animate using the Web Animate API
+        const animation = flyingImage.animate([
+          { // from
+            transform: 'translate(0, 0) scale(1) rotate(0deg)',
+            opacity: 1
+          },
+          { // to
+            // Move to the destination, shrink, and fade out
+            transform: `translate(${endX - startX}px, ${endY - startY}px) scale(0.1) rotate(360deg)`,
+            opacity: 0
+          }
+        ], {
+          duration: 700, // 0.7 seconds
+          easing: 'cubic-bezier(0.5, -0.2, 0.8, 0.5)' // An easing that gives it a nice "arc"
+        });
+
+        // 4. Clean up and resolve the promise when done
+        animation.onfinish = () => {
+          flyingImage.remove();
+          resolve();
+        };
+      });
+    }
+
+    function processImage() {
+      if (!uploadedImage) {
+        document.getElementById('segmentationContent').innerText = "Please upload an image first.";
+        return;
+      }
+      
+      // Show processing state
+      document.getElementById('segmentationContent').innerHTML = `<span style="color:var(--primary);"><i class="fa fa-spinner fa-spin"></i> Processing...</span>`;
+      document.getElementById('segmentationTitle').innerHTML = 'Classifying...';
+      
+      // Get the uploaded image element to animate FROM
+      const startImageElement = document.getElementById('uploadedImageText').querySelector('img');
+      
+      const formData = new FormData();
+      formData.append('image', uploadedImage);
+
+      fetch('/predict', {
+        method: 'POST',
+        body: formData
+      })
+        .then(res => {
+          if (!res.ok) {
+            // Handle server errors (like 500)
+            return res.json().then(err => Promise.reject(err));
+          }
+          return res.json();
+        })
+        .then(data => {
+          // Check for a successful prediction WITH a bin path
+          if (data.bin_path && startImageElement) {
+            
+            // Get the card element to animate TO
+            const endElement = document.getElementById('segmentationCard');
+            
+            // 1. Clear the "Processing..." text
+            document.getElementById('segmentationTitle').innerHTML = 'Waste Classification Result';
+            document.getElementById('segmentationContent').innerHTML = ''; // Empty for animation
+            
+            // 2. Run the animation and wait for it to finish
+            animateToss(startImageElement, endElement).then(() => {
+              
+              // 3. Animation is done, now show the final result
+              // This is the HTML that was in your original file, just formatted nicely
+              const resultHTML = `
+                <span style="color:var(--success); line-height: 1.6;">
+                  Waste Type: <strong>${data.waste_type}</strong><br>
+                  Bin: <strong>${data.prediction}</strong><br>
+                  Confidence: <strong>${data.confidence}</strong>
+                </span>
+                <br><br>
+                <img src="${data.bin_path}" alt="${data.prediction} Bin" style="max-width: 50%; height: auto; border-radius: 4px; animation: fadeIn 0.5s;">
+              `;
+              document.getElementById('segmentationContent').innerHTML = resultHTML;
+            });
+            
+          } else {
+            // Fallback for an error from the server or if something went wrong
+            document.getElementById('segmentationTitle').innerHTML = 'Result';
+            document.getElementById('segmentationContent').innerHTML = 
+              `<span style="color:var(${data.error ? '--danger' : '--success'});">${data.error || data.prediction || 'An unknown error occurred'}</span>`;
+          }
+        })
+        .catch((err) => {
+          // Handle network errors or errors from the .then() block
+          console.error('Fetch Error:', err);
+          document.getElementById('segmentationTitle').innerHTML = 'Error';
+          const errorMessage = err.error || 'Prediction failed. Try again.';
+          document.getElementById('segmentationContent').innerHTML = `<span style="color:var(--danger);">${errorMessage}</span>`;
+        });
+    }
+
+    function captureImage() {
+      const video = document.getElementById("camera");
+      const captureBtn = document.querySelector('#captureTab .upload-label');
+      captureBtn.disabled = true;
+      captureBtn.style.opacity = 0.6;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext("2d").drawImage(video, 0, 0);
+
+      const imgDataUrl = canvas.toDataURL("image/jpeg");
+      
+      // 1. Show the captured image preview
+      document.getElementById("capturedImageText").innerHTML = `<img src="${imgDataUrl}" style="max-width:120px;border-radius:8px;">`;
+      
+      // 2. Get the new preview image to animate FROM
+      const startImageElement = document.getElementById('capturedImageText').querySelector('img');
+      
+      // 3. Set processing text
+      document.getElementById("captureResultCard").querySelector('.result-title').innerHTML = 'Classifying...';
+      // document.getElementById("captureResultText").innerHTML = `<span style="color:var(--primary);"><i class="fa fa-spinner fa-spin"></i> Processing...</span>`;
+
+      canvas.toBlob(blob => {
+        const formData = new FormData();
+        formData.append('image', blob, 'capture.jpg');
+        
+        fetch('/predict', {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => {
+          if (!res.ok) {
+            return res.json().then(err => Promise.reject(err));
+          }
+          return res.json();
+        })    
+        .then(data => {
+          // alert("Data received from server: " + JSON.stringify(data));
+          // alert("Data.bin_path: " + data.bin_path);
+          
+          if (data.bin_path && startImageElement) {
+            // alert("bin_path: " + data.bin_path );
+            // alert("prediction: " + data.prediction );
+            // alert("waste_type: " + data.waste_type );
+            // alert("confidence: " + data.confidence );
+
+            // Get the card element to animate TO
+            const endElement = document.getElementById('captureResultCard');
+                        
+            // 1. Clear the "Processing..." text
+            document.getElementById("captureResultCard").querySelector('.result-title').innerHTML = 'Waste Classification Result';
+            document.getElementById("captureResultCard").querySelector('.result-content').innerHTML =  ''; // Empty for animation
+            
+            // 2. Run the animation
+             animateToss(startImageElement, endElement).then(() => {
+              
+              // // 3. Animation is done, show the final result
+              const resultHTML = `
+                <span style="color:var(--success); line-height: 1.6;">
+                  Waste Type: <strong>${data.waste_type}</strong><br>
+                  Bin: <strong>${data.prediction}</strong><br>
+                  Confidence: <strong>${data.confidence}</strong>
+                </span>
+                <br><br>
+                <img src="${data.bin_path}" alt="${data.prediction} Bin" style="max-width: 50%; height: auto; border-radius: 4px; animation: fadeIn 0.5s;">
+              `;
+              document.getElementById("captureResultCard").querySelector('.result-content').innerHTML = resultHTML;
+             });
+            
+          } else {
+            // Fallback for an error
+            document.getElementById('captureResultCard').querySelector('.result-title').innerHTML = 'Result';
+            document.getElementById('captureResultText').innerHTML = 
+              `<span style="color:var(${data.error ? '--danger' : '--success'});">${data.error || data.prediction || 'An unknown error occurred'}</span>`;
+          }
+        })
+        .catch((err) => {
+          console.error('Fetch Error:', err);
+          document.getElementById('captureResultCard').querySelector('.result-title').innerHTML = 'Error';
+          const errorMessage = err.error || 'Prediction failed. Try again.';
+          document.getElementById('captureResultText').innerHTML = `<span style="color:var(--danger);">${errorMessage}</span>`;
+        })
+        .finally(() => {
+          captureBtn.disabled = false;
+          captureBtn.style.opacity = 1;
+        });
+      }, "image/jpeg");
+    }
+
+
+    function flipCamera() {
+      currentFacingMode = currentFacingMode === "user" ? "environment" : "user";
+      if (stream) stream.getTracks().forEach(track => track.stop());
+      startCamera("camera", currentFacingMode);
+    }
+    // Live detection logic (simplified)
+    function flipRealtimeCamera() {
+      currentFacingMode = currentFacingMode === "user" ? "environment" : "user";
+      if (stream) stream.getTracks().forEach(track => track.stop());
+      startCamera("realtimeCamera", currentFacingMode);
+    }  
+
+  let liveDetectionActive = false;
+    
+  function startLiveDetection() {
+    const video = document.getElementById("realtimeCamera");
+    liveDetectionActive = true;
+    const resultBox = document.getElementById("realtimeResultText");
+    let firstRun = true;
+
+    function sendFrame() {
+      if (!liveDetectionActive) return;
+      if (video.readyState === 4) {
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext("2d").drawImage(video, 0, 0);
+        canvas.toBlob(blob => {
+          const formData = new FormData();
+          formData.append('image', blob, 'frame.jpg');
+          if (firstRun) {
+            resultBox.innerHTML = `<span style="color:var(--primary);"><i class="fa fa-spinner fa-spin"></i> Detecting...</span>`;
+            firstRun = false;
+          }
+          fetch('/predict', {
+            method: 'POST',
+            body: formData
+          })
+            .then(res => res.json())
+            .then(data => {
+
+              // alert("bin_path: " + data.bin_path );
+              // alert("prediction: " + data.prediction );
+              // alert("waste_type: " + data.waste_type );
+              // alert("confidence: " + data.confidence );
+
+              const resultHTML = `
+                <span style="color:var(--success); line-height: 1.6;">
+                  Waste Type: <strong>${data.waste_type}</strong><br>
+                  Bin: <strong>${data.prediction}</strong><br>
+                  Confidence: <strong>${data.confidence}</strong>
+                </span>
+                <br><br>
+                <img src="${data.bin_path}" alt="${data.prediction} Bin" style="max-width: 50%; height: auto; border-radius: 4px; animation: fadeIn 0.5s;">
+              `;
+              resultBox.innerHTML = resultHTML;
+
+              // let result = data.result || data.prediction || "No prediction received.";
+              // let confidence = data.confidence !== undefined ? ` (${(data.confidence * 100).toFixed(1)}%)` : "";
+              // resultBox.innerHTML = `<span style="color:var(--success);">${result}${confidence}</span>`;
+              setTimeout(sendFrame, 1200);
+            })
+            .catch(() => {
+              resultBox.innerHTML = `<span style="color:var(--danger);">Prediction failed.</span>`;
+              setTimeout(sendFrame, 2000);
+            });
+        }, "image/jpeg");
+      } else {
+        setTimeout(sendFrame, 600);
+      }
+    }
+    sendFrame();
+  }
+
+    document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+    btn.addEventListener('click', () => {
+      if (btn.textContent.includes('Webcam')) {
+        liveDetectionActive = false;
+        startCamera("camera", currentFacingMode);
+      }
+      if (btn.textContent.includes('Live')) {
+        startCamera("realtimeCamera", currentFacingMode);
+        setTimeout(startLiveDetection, 1000); // Wait for camera to be ready
+      }
+      if (btn.textContent.includes('Upload')) {
+        liveDetectionActive = false;
+        if (stream) stream.getTracks().forEach(track => track.stop());
+      }
+    });
+  });
+
+    // Drag & drop upload
+    const uploadDrop = document.getElementById('uploadDrop');
+    uploadDrop.addEventListener('dragover', e => { e.preventDefault(); uploadDrop.style.background = 'rgba(33,200,122,0.10)'; });
+    uploadDrop.addEventListener('dragleave', e => { e.preventDefault(); uploadDrop.style.background = 'rgba(33,200,122,0.04)'; });
+    uploadDrop.addEventListener('drop', e => {
+      e.preventDefault();
+      uploadDrop.style.background = 'rgba(33,200,122,0.04)';
+      const files = e.dataTransfer.files;
+      if (files.length) {
+        document.querySelector('.upload-label input[type="file"]').files = files;
+        handleUpload({ files });
+      }
+    });
+
+  </script>
+</body>
+</html>
