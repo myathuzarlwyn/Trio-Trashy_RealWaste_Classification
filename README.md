@@ -88,7 +88,7 @@ This project merges **technology** and **ecology** — making smart waste dispos
 
 ![about_project]()
 
-## 👨‍💼👨‍💻👨‍💼 Team (Group2_AIS)
+## 👨‍💼👨‍💻👨‍💼 Trio-Trashy Team Members
 
 - 👨‍💼 **Mya Thuzar Lwyn** – [LinkedIn](https://www.linkedin.com/in/myathuzarlwyn/)  
 - 👩‍💻 **Ei Shwe Yi Cho Oo** – [LinkedIn](https://www.linkedin.com/in/eishweyichooo/)  
