@@ -6,9 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-
+  <!-- Added plugin for displaying data labels on the chart -->
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>    
+  <script src="https://cdn.plot.ly/plotly-2.33.0.min.js"></script>
+        
   <style>
     
     :root {
@@ -157,27 +162,24 @@
         <canvas id="accuracyChart"></canvas>
       </div>
 
-      <div class="chart-card">
-        <h3>Learning Rate Schedule</h3>
-        <canvas id="lrChart"></canvas>
+      <!-- === NEW CONFUSION MATRIX CHART === -->
+      <div class="chart-card grid-span-all">
+        <h3>Confusion Matrix</h3>
+        <div id="confusionMatrixChart" class="w-full min-h-[600px] sm:min-h-[750px]"></div>
       </div>
-      
+
+      <!-- === Model Accuracy (Training) CHART === -->      
       <div class="chart-card">
         <h3>Model Accuracy (Training)</h3>
         <canvas id="lineChart"></canvas>
       </div>
 
+      <!-- === PER-CLASS ACCURACY CHART === -->
       <div class="chart-card">
-        <h3>Waste Type Distribution</h3>
-        <canvas id="donutChart"></canvas>
-      </div>
-      
-      <div class="chart-card">
-        <h3>Bin Classification Results</h3>
+        <h3>Per-Class Accuracy</h3>
         <canvas id="barChart"></canvas>
       </div>
-      
-      
+    
 
     </div>
   </div>
@@ -189,21 +191,31 @@
 
   <script>
     (function() {
+      // --- Register Datalabels plugin ---
+      // This plugin is loaded from the new script tag in the <head>
+      Chart.register(ChartDataLabels);
+
       // --- Set Chart.js defaults for dark theme ---
       Chart.defaults.color = '#9E9E9E'; 
+      Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
+      // Set datalabels defaults
+      Chart.defaults.plugins.datalabels.color = 'black';
+      Chart.defaults.plugins.datalabels.font = {
+        weight: 'bold',
+        size: 10
+      };
+
       // =============================
       
-      Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
-
-      // === 1. Line Chart ===
+      // === 1. Line Chart (Model Accuracy Training) ===
       const ctxLine = document.getElementById('lineChart').getContext('2d');
       new Chart(ctxLine, {
         type: 'line',
         data: {
-          labels: ['Epoch 1', 'Epoch 5', 'Epoch 10', 'Epoch 15', 'Epoch 20', 'Epoch 25', 'Epoch 30'],
+          labels: ['Epoch 1', 'Epoch 4', 'Epoch 8', 'Epoch 12', 'Epoch 16', 'Epoch 20', 'Epoch 20', 'Epoch 24'],
           datasets: [{
             label: 'Accuracy',
-            data: [65.2,70.2, 78.5, 85.1, 90.3, 92.5,94.7],
+            data: [75.88, 87.80, 70.2, 87.38, 88.08, 90.32, 90.46, 89.76],
             borderColor: 'var(--primary)',
             backgroundColor: 'rgba(33, 200, 122, 0.1)',
             fill: true,
@@ -213,84 +225,152 @@
         options: {
           responsive: true,
           plugins: {
-            legend: { display: false },
-            title: { display: false }
+            legend: { display: false },            
+            title: { display: false },
+            datalabels: { display: false } // Disable for this chart
           },
           scales: {
-            y: {
-              min: 50,
-              max: 100,
-              ticks: { callback: (value) => value + '%' }
-            }
-          }
-        }
+            y: {
+              min: 50,
+              max: 100,
+              ticks: { 
+                callback: (value) => value + '%',
+                color: 'white' // <-- Add this line for Y-axis ticks
+              },
+              // Add grid color for consistency
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              }
+            },
+            // Add X-axis definition
+            x: {
+              ticks: {
+                color: 'white' // <-- Add this for X-axis ticks
+              },
+              // Add grid color for consistency
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              }
+            }
+          }
+        } 
+         
+
       });
 
-      // === 2. Donut Chart ===
-      const ctxDonut = document.getElementById('donutChart').getContext('2d');
-      new Chart(ctxDonut, {
-        type: 'doughnut',
-        data: {
-          labels: ['Cardboard', 'Food Organics', 'Glass', 'Metal', 'Miscellaneous Trash', 'Paper', 'Plastic', 'Textile Trash', 'Vegetation'],
-          datasets: [{
-            label: 'Waste Types',
-            data: [30, 25, 18, 12, 10, 5, 30, 8, 7],
-            backgroundColor: [
-              'var(--success)', 
-              'var(--muted)',
-              'var(--accent)',
-              'var(--danger)',
-              '#9E9E9E',
-              '#607D8B'
-            ],
-            borderWidth: 0,
-            hoverOffset: 4
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                padding: 15,
-                boxWidth: 12
-              }
-            }
-          }
-        }
-      });
 
-      // === 3. Bar Chart ===
-      const ctxBar = document.getElementById('barChart').getContext('2d');
-      new Chart(ctxBar, {
-        type: 'bar',
-        data: {
-          labels: ['Recyclable', 'Hazardous', 'Food', 'Residual'],
-          datasets: [{
-            label: 'Items Classified',
-            data: [142, 88, 51, 70],
-            backgroundColor: [
-              'var(--primary)',
-              'var(--danger)',
-              'var(--accent)',
-              'var(--muted)'
-            ],
-            borderRadius: 4
-          }]
-        },
-        options: {
-          responsive: true,
-          indexAxis: 'y',
-          plugins: {
-            legend: { display: false }
+      // === Confusion Matrix Chart ===
+      // const ctxconfusionMatrixChart = document.getElementById('confusionMatrixChart').getContext('2d');
+      const labels = [
+          'Cardboard', 'Food Organics', 'Glass', 'Metal', 
+          'Miscellaneous Trash', 'Paper', 'Plastic', 'Textile Trash', 'Vegetation'
+      ];
+
+      // The 2D array of values (z-axis data)
+      // Corresponds to z[true_label][predicted_label]
+      const zData = [
+          // Predicted ->
+          // Card, Food, Glas, Metl, Misc, Papr, Plas, Text, Vege  (True)
+          [63,    0,    1,    0,    2,    0,    3,    0,    0], // Cardboard
+          [0,     55,   0,    0,    4,    1,    1,    0,    1], // Food Organics
+          [1,     0,    61,   0,    0,    0,    1,    0,    0], // Glass
+          [1,     0,    1,    102,  7,    0,    8,    0,    0], // Metal
+          [0,     3,    0,    1,    54,   2,    4,    9,    1], // Misc. Trash
+          [3,     0,    0,    0,    0,    69,   2,    1,    0], // Paper
+          [0,     0,    9,    6,    1,    1,    121,  0,    0], // Plastic
+          [0,     0,    0,    0,    1,    0,    1,    46,   0], // Textile Trash
+          [0,     2,    0,    0,    0,    0,    0,    0,    63]  // Vegetation
+      ];
+
+      // --- Create Annotations (Text inside the cells) ---
+      // We do this to control the text color based on the cell's background
+      const annotations = [];
+      // const threshold = 50; // No longer needed, we'll use dark text for all cells
+
+      for (let i = 0; i < labels.length; i++) {
+          for (let j = 0; j < labels.length; j++) {
+              const value = zData[i][j];
+              const annotation = {
+                  // Position the text in the center of the cell
+                  x: labels[j],
+                  y: labels[i],
+                  text: value,
+                  showarrow: false,
+                  font: {
+                      // Forcing dark text for all cells for readability on a light blue scale
+                      color: '#1f2937' // dark-gray-800
+                  }
+              };
+              annotations.push(annotation);
+          }
+      }
+
+      // --- Plotly Chart Definition ---
+      // 1. The Data Trace (the heatmap itself)
+      const data = [
+          {
+              z: zData,
+              x: labels,
+              y: labels,
+              type: 'heatmap',
+              // Define a custom light blue colorscale that avoids dark navy
+              colorscale: [
+                  [0.0, '#e6f7ff'], // very light blue for 0
+                  [0.5, '#b3e0ff'], // light blue for midrange
+                  [1.0, '#80ccff']  // baby blue for max
+              ],
+              reversescale: false,  // Light-to-dark 
+              showscale: true,    // Show the color bar legend
+              hoverongaps: false,
+              // Custom tooltip text
+              hovertemplate: '<b>True:</b> %{y}<br>' +
+                              '<b>Predicted:</b> %{x}<br>' +
+                              '<b>Count:</b> %{z}' +
+                              '<extra></extra>' // Hides the default "trace" info
+          }
+      ];
+
+      // 2. The Layout (titles, axes, etc.)
+      const layout = {
+          title: {
+              text: 'Model Performance by Class',
+              font: { color: '#1f2937' } // Dark text for light theme
           },
-          scales: {
-            x: { grid: { display: false } },
-            y: { grid: { display: false } }
-          }
-        }
-      });
+          annotations: annotations, // Add the text labels to the chart
+          xaxis: {
+              title: '<b>Predicted</b>',
+              side: 'bottom', // Move x-axis labels to the bottom
+              tickangle: -60,  // Angle the labels for readability
+              automargin: true, // Automatically adjust margin for long labels
+              titlefont: { color: '#111827' }, // Dark text
+              tickfont: { color: '#374151' } // Muted dark text
+          },
+          yaxis: {
+              title: '<b>True</b>',
+              autorange: 'reversed', // Puts (0,0) at the top-left corner
+              automargin: true,   // Automatically adjust margin
+              titlefont: { color: '#111827' }, // Dark text
+              tickfont: { color: '#374151' } // Muted dark text
+          },
+          // Add some padding
+          margin: {
+              l: 150, // Left margin for "Miscellaneous Trash"
+              b: 150, // Bottom margin for angled labels
+              t: 50,
+              r: 50
+          },
+          paper_bgcolor: '#ffffff', // Background of the whole chart area
+          plot_bgcolor: '#f9fafb'  // Background of the plot itself (light gray)
+      };
+      
+      // 3. The Config (make it responsive)
+      const config = {
+          responsive: true
+      };
+
+      // 4. Render the chart
+      // Plotly.newPlot('confusionMatrixChart', data, layout, config); // <-- This was the error
+      Plotly.newPlot('confusionMatrixChart', data, layout, config); // <-- Corrected to target the <div> with id="chart"
 
 
       // === 4. LOSS CHART ===
@@ -341,8 +421,10 @@
           plugins: {
             legend: {
               position: 'top', // Show legend like in the image
-              align: 'end'
-            }
+              align: 'end',
+              labels: { color: 'white' }
+            },
+            datalabels: { display: false } // Disable for this chart
           },
           scales: {
             y: {
@@ -350,16 +432,19 @@
               max: 6.5, // Set max to see the spike
               title: {
                 display: true,
-                text: 'Loss'
-              }
+                text: 'Loss',
+                color: 'white'
+              },
+              ticks: { color: 'white' }
             },
             x: {
               title: {
                 display: true,
-                text: 'Epoch'
+                text: 'Epoch',
+                color: 'white'
               },
-              // Show fewer labels on x-axis to avoid clutter
               ticks: {
+                color: 'white',
                 callback: function(value, index, values) {
                   return (index % 5 === 0) ? this.getLabelForValue(value) : '';
                 }
@@ -413,7 +498,12 @@
         options: {
           responsive: true,
           plugins: {
-            legend: { position: 'top', align: 'end' }
+            legend: { 
+              position: 'top', 
+              align: 'end',
+              labels: { color: 'white' }
+            },
+            datalabels: { display: false } // Disable for this chart
           },
           scales: {
             y: {
@@ -421,15 +511,19 @@
               max: 1.05, // Max Y-axis at 1.05 (just over 1.0)
               title: {
                 display: true,
-                text: 'Accuracy'
-              }
+                text: 'Accuracy',
+                color: 'white'
+              },
+              ticks: { color: 'white' }
             },
             x: {
               title: {
                 display: true,
-                text: 'Epoch'
+                text: 'Epoch',
+                color: 'white'
               },
               ticks: {
+                color: 'white',
                 callback: function(value, index, values) {
                   // Show labels for epochs 0, 5, 10, 15...
                   return (index % 5 === 0) ? this.getLabelForValue(value) : '';
@@ -440,59 +534,80 @@
         }
       });
 
-      // === 6. NEW LEARNING RATE CHART ===
-      const ctxLr = document.getElementById('lrChart').getContext('2d');
+      // === 5. PER-CLASS ACCURACY (NEW BAR CHART) ===
+      const ctxBar = document.getElementById('barChart').getContext('2d');
       
-      // Data from your image:
-      const lrData = [
-        ...Array(13).fill(0.00010),  // Epochs 1-13
-        ...Array(6).fill(0.00005),   // Epochs 14-19
-        ...Array(7).fill(0.000025),  // Epochs 20-26
-        ...Array(3).fill(0.000012),  // Epochs 27-29
-        ...Array(3).fill(0.00001)    // Epochs 30-32
+      // Data from your new image
+      const perClassLabels = [
+          'Cardboard', 'Food Organics', 'Glass', 'Metal', 
+          'Miscellaneous Trash', 'Paper', 'Plastic', 'Textile Trash', 'Vegetation'
+      ];
+      const perClassAccuracy = [
+          0.92, 0.88, 0.97, 0.86, 0.73, 0.92, 0.88, 0.96, 0.97
+      ];
+      
+      // Colors from the image (approximated)
+      const perClassColors = [
+          '#6A7FDB', // Cardboard
+          '#7C92DF', // Food Organics
+          '#B5C3E6', // Glass
+          '#D1D9E8', // Metal
+          '#E0E0E0', // Misc Trash
+          '#F2E1D7', // Paper
+          '#E9C8B5', // Plastic
+          '#D99C8C', // Textile Trash
+          '#C97064'  // Vegetation
       ];
 
-      new Chart(ctxLr, {
-        type: 'line',
+      new Chart(ctxBar, {
+        type: 'bar',
         data: {
-          labels: epochLabels,
-          datasets: [
-            {
-              label: 'Learning Rate',
-              data: lrData,
-              borderColor: '#a855f7', // Purple color
-              stepped: true, // This creates the blocky "step" look
-              pointStyle: false, // No dots on the line
-              tension: 0.1
-            }
-          ]
+          labels: perClassLabels,
+          datasets: [{
+            label: 'Accuracy',
+            data: perClassAccuracy,
+            backgroundColor: perClassColors,
+            borderRadius: 4
+          }]
         },
         options: {
           responsive: true,
           plugins: {
-            legend: { position: 'top', align: 'end' }
+            legend: { display: false },
+            datalabels: { 
+                display: false // Turned off for a cleaner look like the image
+            } 
           },
           scales: {
-            y: {
-              title: {
-                display: true,
-                text: 'Learning Rate'
-              }
-            },
-            x: {
-              title: {
-                display: true,
-                text: 'Epoch'
-              },
-              ticks: {
-                callback: function(value, index, values) {
-                  return (index % 5 === 0) ? this.getLabelForValue(value) : '';
+            x: { 
+                grid: { display: false },
+                ticks: {
+                    color:'white', // White text
+                    maxRotation: 60, // Angle labels
+                    minRotation: 60
                 }
-              }
+            },
+            y: { 
+                grid: { 
+                    display: true,
+                    color: 'rgba(255, 255, 255, 0.1)' // Light grid lines
+                },
+                ticks: { 
+                    color: 'white', // White text
+                    callback: (value) => value.toFixed(1) // 0.0, 0.2, ...
+                },
+                min: 0.0,
+                max: 1.0,
+                title: {
+                    display: true,
+                    text: 'Accuracy',
+                    color:'white'
+                }
             }
           }
         }
       });
+       
 
     })();
   </script>

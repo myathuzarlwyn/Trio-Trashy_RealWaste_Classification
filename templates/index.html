@@ -554,11 +554,19 @@
               
               // 3. Animation is done, now show the final result
               // This is the HTML that was in your original file, just formatted nicely
+              // const resultHTML = `
+              //   <span style="color:var(--success); line-height: 1.6;">
+              //     Waste Type: <strong>${data.waste_type}</strong><br>
+              //     Bin: <strong>${data.prediction}</strong><br>
+              //     Confidence: <strong>${data.confidence}</strong>
+              //   </span>
+              //   <br><br>
+              //   <img src="${data.bin_path}" alt="${data.prediction} Bin" style="max-width: 50%; height: auto; border-radius: 4px; animation: fadeIn 0.5s;">
+              // `;
               const resultHTML = `
                 <span style="color:var(--success); line-height: 1.6;">
                   Waste Type: <strong>${data.waste_type}</strong><br>
                   Bin: <strong>${data.prediction}</strong><br>
-                  Confidence: <strong>${data.confidence}</strong>
                 </span>
                 <br><br>
                 <img src="${data.bin_path}" alt="${data.prediction} Bin" style="max-width: 50%; height: auto; border-radius: 4px; animation: fadeIn 0.5s;">
@@ -637,14 +645,23 @@
             document.getElementById("captureResultCard").querySelector('.result-content').innerHTML =  ''; // Empty for animation
             
             // 2. Run the animation
-             animateToss(startImageElement, endElement).then(() => {
+            animateToss(startImageElement, endElement).then(() => {
               
-              // // 3. Animation is done, show the final result
+              // 3. Animation is done, show the final result
+              // const resultHTML = `
+              //   <span style="color:var(--success); line-height: 1.6;">
+              //     Waste Type: <strong>${data.waste_type}</strong><br>
+              //     Bin: <strong>${data.prediction}</strong><br>
+              //     Confidence: <strong>${data.confidence}</strong>
+              //   </span>
+              //   <br><br>
+              //   <img src="${data.bin_path}" alt="${data.prediction} Bin" style="max-width: 50%; height: auto; border-radius: 4px; animation: fadeIn 0.5s;">
+              // `;
+
               const resultHTML = `
                 <span style="color:var(--success); line-height: 1.6;">
                   Waste Type: <strong>${data.waste_type}</strong><br>
                   Bin: <strong>${data.prediction}</strong><br>
-                  Confidence: <strong>${data.confidence}</strong>
                 </span>
                 <br><br>
                 <img src="${data.bin_path}" alt="${data.prediction} Bin" style="max-width: 50%; height: auto; border-radius: 4px; animation: fadeIn 0.5s;">
@@ -718,12 +735,19 @@
               // alert("prediction: " + data.prediction );
               // alert("waste_type: " + data.waste_type );
               // alert("confidence: " + data.confidence );
-
+              // const resultHTML = `
+              //   <span style="color:var(--success); line-height: 1.6;">
+              //     Waste Type: <strong>${data.waste_type}</strong><br>
+              //     Bin: <strong>${data.prediction}</strong><br>
+              //     Confidence: <strong>${data.confidence}</strong>
+              //   </span>
+              //   <br><br>
+              //   <img src="${data.bin_path}" alt="${data.prediction} Bin" style="max-width: 50%; height: auto; border-radius: 4px; animation: fadeIn 0.5s;">
+              // `;
               const resultHTML = `
                 <span style="color:var(--success); line-height: 1.6;">
                   Waste Type: <strong>${data.waste_type}</strong><br>
                   Bin: <strong>${data.prediction}</strong><br>
-                  Confidence: <strong>${data.confidence}</strong>
                 </span>
                 <br><br>
                 <img src="${data.bin_path}" alt="${data.prediction} Bin" style="max-width: 50%; height: auto; border-radius: 4px; animation: fadeIn 0.5s;">

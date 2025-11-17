@@ -13,7 +13,6 @@ CORS(app)
 interpreter = tf.lite.Interpreter(model_path="mobilenetv2_final_14Nov_2.tflite") ## # Latest model by Mimi ("mobilenetv2_final_14Nov_2.tflite")
 # interpreter = tf.lite.Interpreter(model_path="real_waste_cnn_model_13Nov2025_tm.tflite") #Teachable Machine trained model ("real_waste_cnn_model_13Nov2025_tm.tflite")
 
-
 interpreter.allocate_tensors()
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
@@ -43,7 +42,7 @@ IMG_SIZE = 224
 WASTE_TO_BIN_MAP = {
     'Cardboard' : 'Recyclable',
     'Food Organics' : 'Food',
-    'Glass' : 'Hazardous',
+    'Glass' : 'Recyclable',
     'Metal' : 'Hazardous',
     'Miscellaneous Trash' : 'Residual',
     'Paper' : 'Recyclable',
