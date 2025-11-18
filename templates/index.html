@@ -234,7 +234,8 @@
       text-align: center;
       color: #fff;
       margin-bottom: 12px;
-    }
+      align-content: center;
+    }    
     .result-card i {
       font-size: 2.2rem;
       color: var(--muted);
@@ -308,7 +309,7 @@
 
   <div class="header">
     <div class="logo">
-       <i class="fa-solid fa-clover fa-rotate-by fa-lg" style="color:#1bb16a;; --fa-rotate-angle: 150deg;"></i> Real Waste Classification System
+       <i class="fa-solid fa-clover fa-rotate-by fa-lg" style="color:#1bb16a;; --fa-rotate-angle: 150deg;"></i> AI-Powered Waste Classification System
     </div>
     <div class="badge feature-desc"> Using Machine Learning to automatically classify waste into recyclable categories, promoting sustainability and efficient recycling. </div>
     <div class="subtitle"></div> 
@@ -349,14 +350,14 @@
         </label>
         <div class="upload-note">Limit 20MB per file - JPG, JPEG, PNG</div>
       </div>
-      <div class="cards-row">
+      <div class="cards-row">        
         <div class="result-card" id="uploadedImageCard">
-          <i class="fa-regular fa-image"></i>
-          <div class="result-title">Uploaded Image</div>
+          <!-- <i class="fa-regular fa-image"></i> -->    
+           <div class="result-title">Uploaded Image</div>      
           <div class="result-content" id="uploadedImageText">No image uploaded</div>
         </div>
         <div class="result-card" id="segmentationCard">
-          <i class="fa-regular fa-file-lines"></i>
+          <!-- <i class="fa-regular fa-file-lines"></i> -->
           <div class="result-title" id="segmentationTitle">Waste Classification Result</div>
           <div class="result-content" id="segmentationContent">
             Result will appear here!...
@@ -382,12 +383,12 @@
       </div>
       <div class="cards-row">
         <div class="result-card" id="capturedImageCard">
-          <i class="fa-regular fa-image"></i>
+          <!-- <i class="fa-regular fa-image"></i> -->
           <div class="result-title">Captured Image</div>
           <div class="result-content" id="capturedImageText">No image captured</div>
         </div>
         <div class="result-card" id="captureResultCard">
-          <i class="fa-regular fa-file-lines"></i>
+          <!-- <i class="fa-regular fa-file-lines"></i> -->
           <div class="result-title" id="segmentationTitle">Segregation Result</div>
           <div class="result-content" id="segmentationContent">Results will appear here!...</div>
         </div>
@@ -404,7 +405,7 @@
         <button class="upload-label" onclick="flipRealtimeCamera()" style="background:var(--accent);color:#222;margin-top:10px;">Flip Camera</button>
       </div>
       <div class="result-card" style="margin:0 auto;">
-        <i class="fa-regular fa-file-lines"></i>
+        <!-- <i class="fa-regular fa-file-lines"></i> -->
         <div class="result-title">Live Result</div>
         <div class="result-content" id="realtimeResultText">Results will appear here</div>
       </div>
@@ -550,20 +551,8 @@
             document.getElementById('segmentationContent').innerHTML = ''; // Empty for animation
             
             // 2. Run the animation and wait for it to finish
-            animateToss(startImageElement, endElement).then(() => {
-              
-              // 3. Animation is done, now show the final result
-              // This is the HTML that was in your original file, just formatted nicely
-              // const resultHTML = `
-              //   <span style="color:var(--success); line-height: 1.6;">
-              //     Waste Type: <strong>${data.waste_type}</strong><br>
-              //     Bin: <strong>${data.prediction}</strong><br>
-              //     Confidence: <strong>${data.confidence}</strong>
-              //   </span>
-              //   <br><br>
-              //   <img src="${data.bin_path}" alt="${data.prediction} Bin" style="max-width: 50%; height: auto; border-radius: 4px; animation: fadeIn 0.5s;">
-              // `;
-              const resultHTML = `
+            animateToss(startImageElement, endElement).then(() => {              
+            const resultHTML = `
                 <span style="color:var(--success); line-height: 1.6;">
                   Waste Type: <strong>${data.waste_type}</strong><br>
                   Bin: <strong>${data.prediction}</strong><br>

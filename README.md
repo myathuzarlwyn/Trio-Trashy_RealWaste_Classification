@@ -1,12 +1,12 @@
 # 🌿 Trio-Trashy: Real Waste Classification System with Machine Learning 
 
-**Using Machine Learning to automatically classify waste into recyclable categories, promoting sustainability and efficient recycling.**
+**Using AI & ML to automatically classify waste into recyclable categories, promoting sustainability and efficient recycling.**
 
 ---
 
 ## 📌 Project Overview
 
-**Trio-Trashy: Real Waste Classification System** addresses the growing challenge of improper waste disposal by providing a smart, affordable, and scalable solution. Using a simple webcam and a deep learning model, the system can identify waste items in **nine categories**:
+**Trio-Trashy: Real Waste Classification System** promotes proper recycling, reduces pollution, and supports a cleaner environment. The system addresses the improper waste disposal by providing a smart, affordable, and scalable solution. Using a simple webcam and a deep learning model, the system can identify waste items in **nine categories**:
 
 # --- Waste Labels ---
 - 0: 🔁 Cardboard
@@ -23,10 +23,9 @@
 - 0 = Recyclable
 - 1 = Hazardous
 - 2 = Food
-- 3 = Residual
+- 3 = General
 
 The model is trained using image data and deployed with **TensorFlow Lite** for real-time classification, all running on **low-cost consumer devices** without special hardware. 
-The project promotes proper recycling, reduces pollution, and supports a cleaner environment.
 
 ---
 
@@ -90,11 +89,10 @@ This project merges **technology** and **ecology** — making smart waste dispos
 
 ## 👨‍💼👨‍💻👨‍💼 Trio-Trashy Team Members
 
-- 👨‍💼 **Mya Thuzar Lwyn** – [LinkedIn](https://www.linkedin.com/in/myathuzarlwyn/)  
-- 👩‍💻 **Ei Shwe Yi Cho Oo** – [LinkedIn](https://www.linkedin.com/in/eishweyichooo/)  
-- 👨‍💻 **Mimi Zhou** – [LinkedIn](https://www.linkedin.com/in/mimi-zhou-a952716b/) 
-
+- 👨‍💼 **Mya Thuzar Lwyn@Mia** – [LinkedIn](https://www.linkedin.com/in/myathuzarlwyn/)  
+- 👩‍💻 **Ei Shwe Yi Cho Oo@Erika** – [LinkedIn](https://www.linkedin.com/in/eishweyichooo/)  
+- 👨‍💻 **Mimi Zhou@Mimi** – [LinkedIn](https://www.linkedin.com/in/mimi-zhou-a952716b/) 
 
 
 # Trio-Trashy_RealWaste_Classification
-Real Waste Classification with Machine Learning and Flask
+Real Waste Classification with AI-based Machine Learning and Flask

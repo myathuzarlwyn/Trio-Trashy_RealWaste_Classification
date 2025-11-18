@@ -145,13 +145,24 @@
     <div class="dashboard-grid">
       <div class="chart-card grid-span-all">
         <h1><i class="fa-solid fa-chart-line fa-sm" style="color:#21c87a;"></i>  Project Dashboard</h1><br/>
-
         <h3>About The Project</h3>
-        <p>This project uses a TensorFlow Lite model to classify waste images in real-time.</p>
-        <p>The system is built with a **Flask (Python)** backend to serve the model and a **React-inspired JavaScript** frontend for the user interface.</p>
-        <p>Our goal is to promote proper recycling and reduce environmental impact through accessible AI.</p>
+        <p>The RealWaste Web Application is an AI-powered image classification tool designed to help users identify different categories of waste using machine learning. 
+          The system analyses an image uploaded by the user and predicts the correct waste category, supporting improved recycling and sustainability practices. 
+          Click here: 
+          <a href="static/docs/Trio-Trashy_ApplicationUserGuide.pdf" download style="color: #21c87a; text-decoration: none; font-weight: bold; display: inline-block; margin-top: 10px;">
+            <i class="fa-solid fa-download"></i> &nbsp;Download User Guide
+          </a>
+        </p>
+     
+        <ul style="list-style-type: square; padding-left: 20px; line-height: 1.6; columns: 1; -webkit-columns: 1; -moz-columns: 1; display: block; width: 100%;">
+          <li style="margin-bottom: 8px; padding-left: 5px;">Our goal is to promote proper recycling and reduce environmental impact through accessible AI.</li>
+          <li style="margin-bottom: 8px; padding-left: 5px;">This project uses a TensorFlow Lite model to classify waste images in real-time and utilize OpenCV2 for image processing.</li>
+          <li style="margin-bottom: 8px; padding-left: 5px;">The system is built with a Flask (Python) backend to serve the model and a React-inspired JavaScript frontend for the user interface. </li>
+        </ul>
+        <br/>
+        
       </div>
-
+    
       <div class="chart-card">
         <h3>Training vs Validation Loss</h3>
         <canvas id="lossChart"></canvas>

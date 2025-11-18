@@ -18,7 +18,7 @@ input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 dustbin_image_folder = r"D:\AIS\Trio-Trashy_RealWaste_Classification\static\Bins"
 labels = ['Cardboard', 'Food Organics', 'Glass', 'Metal', 'Miscellaneous Trash', 'Paper', 'Plastic', 'Textile Trash', 'Vegetation'] 
-bin_labels = ['Recyclable', 'Hazardous', 'Food', 'Residual']
+bin_labels = ['Recyclable', 'Hazardous', 'Food', 'General']
 IMG_SIZE = 224
 
 # --- Waste Labels ---
@@ -36,7 +36,7 @@ IMG_SIZE = 224
 # 0 = Recyclable
 # 1 = Hazardous
 # 2 = Food
-# 3 = Residual
+# 3 = General
 
 # --- Waste Category (0-8) to Bin Type (0-3) Map ---        
 WASTE_TO_BIN_MAP = {
@@ -44,10 +44,10 @@ WASTE_TO_BIN_MAP = {
     'Food Organics' : 'Food',
     'Glass' : 'Recyclable',
     'Metal' : 'Hazardous',
-    'Miscellaneous Trash' : 'Residual',
+    'Miscellaneous Trash' : 'General',
     'Paper' : 'Recyclable',
-    'Plastic' : 'Residual',
-    'Textile Trash' : 'Residual',
+    'Plastic' : 'General',
+    'Textile Trash' : 'General',
     'Vegetation' : 'Food'
 }
     
