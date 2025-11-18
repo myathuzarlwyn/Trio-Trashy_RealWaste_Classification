@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app) 
 
 # Load model
-interpreter = tf.lite.Interpreter(model_path="mobilenetv2_final_14Nov_2.tflite") ## # Latest model by Mimi ("mobilenetv2_final_14Nov_2.tflite")
+interpreter = tf.lite.Interpreter(model_path="mobilenetv2_fixed_FP16.tflite") ## # Latest model by Mimi ("mobilenetv2_final_14Nov_2.tflite")
 # interpreter = tf.lite.Interpreter(model_path="real_waste_cnn_model_13Nov2025_tm.tflite") #Teachable Machine trained model ("real_waste_cnn_model_13Nov2025_tm.tflite")
 
 interpreter.allocate_tensors()
