@@ -1,4 +1,4 @@
-# 🌿 Trio-Trashy: Real Waste Classification System with Machine Learning 
+# 🌿 Trio-Trashy: Real Waste Classification System with AI & Machine Learning 
 
 **Using AI & ML to automatically classify waste into recyclable categories, promoting sustainability and efficient recycling.**
 
@@ -73,19 +73,32 @@ This project merges **technology** and **ecology** — making smart waste dispos
 
 ---
 
-## 📄 Screenshots:
+## 📄 Deployment Guide:
+**Deployment Environment Process Flow**:
+![deployment-environment-flow](/static/screenshots/deploymentflow.png)
 
-![homepage]()
+## 🌿 Screenshots:
+**Home Page**:
+![Home Page](/static/screenshots/homepage_captured.png)
 
-![upload]()
+**3 Ways of image detection**:
+![Input_methods](/static/screenshots/input_methods.png)
 
-![captured_waste]()
+**Upload Image**:
+![Upload Image](/static/screenshots/upload_image.png)
 
-![livecamera_waste]()
+**Capture from webcam**:
+![Capture from webcame](/static/screenshots/capture_webcam.png)
 
-![about_team]()
+**Live Detection**:
+![Live Detection](/static/screenshots/live_detection.png)
 
-![about_project]()
+**Trio-Trashy team members**:
+![about_team](/static/screenshots/trio-trashy_team_members.png)
+
+**About Project**:
+![about_project](/static/screenshots/)
+
 
 ## 👨‍💼👨‍💻👨‍💼 Trio-Trashy Team Members
 

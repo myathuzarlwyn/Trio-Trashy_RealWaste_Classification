@@ -1,25 +1,33 @@
+import os
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import numpy as np
-import os
 import cv2
 import tensorflow as tf
 from PIL import Image, ImageOps
+import warnings
+
+# 1. Silence the TFLite warning
+warnings.filterwarnings("ignore", category=UserWarning, message=".*_INTERPRETER_DELETION_WARNING.*")
 
 app = Flask(__name__)
 CORS(app) 
 
 # Load model
-interpreter = tf.lite.Interpreter(model_path="mobilenetv2_fixed_FP16.tflite") ## # Latest model by Mimi ("mobilenetv2_final_14Nov_2.tflite")
+model_file_path = os.path.join("model_files", "mobilenetv2_fixed_FP16.tflite")
+interpreter = tf.lite.Interpreter(model_path=model_file_path) ### Latest model by Mimi ("mobilenetv2_final_14Nov_2.tflite")
 # interpreter = tf.lite.Interpreter(model_path="real_waste_cnn_model_13Nov2025_tm.tflite") #Teachable Machine trained model ("real_waste_cnn_model_13Nov2025_tm.tflite")
 
 interpreter.allocate_tensors()
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
-dustbin_image_folder = r"D:\AIS\Trio-Trashy_RealWaste_Classification\static\Bins"
+dustbin_image_folder = r"\static\Bins"
 labels = ['Cardboard', 'Food Organics', 'Glass', 'Metal', 'Miscellaneous Trash', 'Paper', 'Plastic', 'Textile Trash', 'Vegetation'] 
 bin_labels = ['Recyclable', 'Hazardous', 'Food', 'General']
 IMG_SIZE = 224
+
 
 # --- Waste Labels ---
 # 0: 🔁 Cardboard
@@ -99,6 +107,8 @@ def predict():
         print("waste_label : " + waste_label)
         print("bin_label : " + bin_label)
         print("confidence : " + str(confidence))
+        print("dustbin_image_folder: " + dustbin_image_folder)        
+        print("Model file path: " + model_file_path)
 
         # Check if mapping was successful
         if bin_label is None:
@@ -116,11 +126,10 @@ def predict():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
+
+
+
+# --- Run the app ---
+# ---------------------
 if __name__ == '__main__':
-    # Development mode
-    if app.config["ENV"] == "development":
-        app.run(host="0.0.0.0", debug=True)
-    # Production mode
-    else:
-        app.run(host="0.0.0.0", debug=False)
+    app.run(host="127.0.0.1", debug=False)

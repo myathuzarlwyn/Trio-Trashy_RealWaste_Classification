@@ -36,7 +36,7 @@
       color: var(--text);
       min-height: 100vh;
     }
-    
+
     h2, p {
       margin: 10px;
     }
@@ -162,24 +162,26 @@
         <br/>
         
       </div>
-    
+
+      <!-- === LOSS CHART === -->
       <div class="chart-card">
         <h3>Training vs Validation Loss</h3>
         <canvas id="lossChart"></canvas>
       </div>
 
+      <!-- === ACCURACY CHART === -->
       <div class="chart-card">
         <h3>Training vs Validation Accuracy</h3>
         <canvas id="accuracyChart"></canvas>
       </div>
 
-      <!-- === NEW CONFUSION MATRIX CHART === -->
+      <!-- === CONFUSION MATRIX CHART === -->
       <div class="chart-card grid-span-all">
         <h3>Confusion Matrix</h3>
         <div id="confusionMatrixChart" class="w-full min-h-[600px] sm:min-h-[750px]"></div>
       </div>
 
-      <!-- === Model Accuracy (Training) CHART === -->      
+      <!-- === MODEL ACCURACY TRAIING CHART === -->      
       <div class="chart-card">
         <h3>Model Accuracy (Training)</h3>
         <canvas id="lineChart"></canvas>
@@ -191,7 +193,6 @@
         <canvas id="barChart"></canvas>
       </div>
     
-
     </div>
   </div>
   <div class="footer">
@@ -218,59 +219,190 @@
 
       // =============================
       
-      // === 1. Line Chart (Model Accuracy Training) ===
-      const ctxLine = document.getElementById('lineChart').getContext('2d');
-      new Chart(ctxLine, {
+      // === 1. LOSS CHART ===
+      const ctxLoss = document.getElementById('lossChart').getContext('2d');
+      
+      // Use the same labels 0-23 as Accuracy
+      const epochLabels = Array.from({ length: 24 }, (_, i) => i);       
+      const trainingLossData = [
+        1.18, 0.62, 0.46, 0.36, 0.29, 0.24, 0.20, 0.17, 0.16, 0.13, 
+        0.10, 0.095, 0.10, 0.09, 0.07, 0.06, 0.07, 0.055, 0.05, 0.05, 
+        0.04, 0.04, 0.04, 0.03
+      ];
+      const validationLossData = [
+        0.74, 0.54, 0.43, 0.41, 0.40, 0.37, 0.35, 0.34, 0.39, 0.32, 
+        0.33, 0.37, 0.31, 0.32, 0.31, 0.32, 0.35, 0.32, 0.28, 0.32, 
+        0.41, 0.30, 0.30, 0.31
+      ];
+      
+      new Chart(ctxLoss, {
         type: 'line',
         data: {
-          labels: ['Epoch 1', 'Epoch 4', 'Epoch 8', 'Epoch 12', 'Epoch 16', 'Epoch 20', 'Epoch 20', 'Epoch 24'],
-          datasets: [{
-            label: 'Accuracy',
-            data: [75.88, 87.80, 70.2, 87.38, 88.08, 90.32, 90.46, 89.76],
-            borderColor: 'var(--primary)',
-            backgroundColor: 'rgba(33, 200, 122, 0.1)',
-            fill: true,
-            tension: 0.4
-          }]
+          labels: epochLabels,
+          datasets: [
+            {
+              label: 'Training Loss',
+              data: trainingLossData,
+              borderColor: '#1f77b4', // Standard Blue (same as accuracy chart)
+              backgroundColor: 'rgba(31, 119, 180, 0.1)',
+              tension: 0.1,
+              pointStyle: 'circle', // Circle points
+              pointRadius: 4,
+              pointBackgroundColor: '#1f77b4'
+            },
+            {
+              label: 'Validation Loss',
+              data: validationLossData,
+              borderColor: '#008000', // Green (Changed from Orange as requested)
+              backgroundColor: 'rgba(0, 128, 0, 0.1)',
+              tension: 0.1,
+              pointStyle: 'rect', // Square points
+              pointRadius: 4,
+              pointBackgroundColor: '#008000'
+            }
+          ]
         },
         options: {
           responsive: true,
           plugins: {
-            legend: { display: false },            
-            title: { display: false },
-            datalabels: { display: false } // Disable for this chart
+            legend: {
+              position: 'top',
+              align: 'end', // Right aligned like the image
+              labels: { color: 'white' }
+            },
+            datalabels: { display: false }
           },
           scales: {
-            y: {
-              min: 50,
-              max: 100,
-              ticks: { 
-                callback: (value) => value + '%',
-                color: 'white' // <-- Add this line for Y-axis ticks
-              },
-              // Add grid color for consistency
-              grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
-              }
-            },
-            // Add X-axis definition
-            x: {
-              ticks: {
-                color: 'white' // <-- Add this for X-axis ticks
-              },
-              // Add grid color for consistency
-              grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
-              }
-            }
-          }
-        } 
-         
+            y: {
+              beginAtZero: true,
+              max: 1.25, // Slightly above the max value (1.18)
+              title: {
+                display: true,
+                text: 'Loss',
+                color: 'white'
+              },
+              ticks: { 
+                color: 'white',
+                stepSize: 0.2
+              },
+              grid: {
+                color: 'rgba(255, 255, 255, 0.2)'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Epoch',
+                color: 'white'
+              },
+              ticks: {
+                color: 'white',
+                callback: function(value, index, values) {
+                  return (index % 5 === 0) ? this.getLabelForValue(value) : '';
+                }
+              },
+              grid: {
+                color: 'rgba(255, 255, 255, 0.2)'
+              }
+            }
+          }
+        }
+      }); 
 
+     
+
+      // === 2. ACCURACY CHART ===
+      const ctxAccuracy = document.getElementById('accuracyChart').getContext('2d');      
+      const accuracyEpochLabels = Array.from({ length: 24 }, (_, i) => i); // 0 to 23
+      
+      const trainingAccuracyData = [
+        0.615, 0.79, 0.845, 0.885, 0.905, 0.92, 0.935, 0.948, 0.95, 0.96, 
+        0.97, 0.971, 0.969, 0.971, 0.979, 0.979, 0.976, 0.982, 0.985, 0.985, 
+        0.987, 0.988, 0.987, 0.992
+      ];
+      
+      const validationAccuracyData = [
+        0.76, 0.805, 0.845, 0.88, 0.85, 0.872, 0.872, 0.875, 0.871, 0.894, 
+        0.891, 0.881, 0.884, 0.889, 0.897, 0.904, 0.884, 0.891, 0.910, 0.905, 
+        0.884, 0.901, 0.894, 0.898
+      ];
+      
+      new Chart(ctxAccuracy, {
+        type: 'line',
+        data: {
+          labels: accuracyEpochLabels, // Using 0-23 labels
+          datasets: [
+            {
+              label: 'Training Accuracy',
+              data: trainingAccuracyData,
+              borderColor: '#1f77b4', // Standard matplotlib Blue
+              backgroundColor: 'rgba(31, 119, 180, 0.1)',
+              tension: 0.1,
+              pointStyle: 'circle',
+              pointRadius: 4,
+              pointBackgroundColor: '#1f77b4'
+            },
+            {
+              label: 'Validation Accuracy',
+              data: validationAccuracyData,
+              borderColor: '#008000', // Green to match image
+              backgroundColor: 'rgba(0, 128, 0, 0.1)',
+              tension: 0.1,
+              pointStyle: 'rect', // Square points to match image
+              pointRadius: 4,
+              pointBackgroundColor: '#008000'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { 
+              position: 'top', 
+              align: 'start', // Left aligned like the image
+              labels: { color: 'white' }
+            },
+            datalabels: { display: false }
+          },
+          scales: {
+            y: {
+              min: 0.60, // Start at 0.60
+              max: 1.01, // Go slightly above 1.0
+              title: {
+                display: true,
+                text: 'Accuracy',
+                color: 'white'
+              },
+              ticks: { 
+                color: 'white',
+                stepSize: 0.05
+              },
+              grid: {
+                color: 'rgba(255, 255, 255, 0.2)'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Epoch',
+                color: 'white'
+              },
+              ticks: {
+                color: 'white',
+                callback: function(value, index, values) {
+                  return (index % 5 === 0) ? this.getLabelForValue(value) : '';
+                }
+              },
+              grid: {
+                color: 'rgba(255, 255, 255, 0.2)'
+              }
+            }
+          }
+        }
       });
 
 
-      // === Confusion Matrix Chart ===
+      // === 3. Confusion Matrix Chart ===
       // const ctxconfusionMatrixChart = document.getElementById('confusionMatrixChart').getContext('2d');
       const labels = [
           'Cardboard', 'Food Organics', 'Glass', 'Metal', 
@@ -278,7 +410,6 @@
       ];
 
       // The 2D array of values (z-axis data)
-      // Corresponds to z[true_label][predicted_label]
       const zData = [
           // Predicted ->
           // Card, Food, Glas, Metl, Misc, Papr, Plas, Text, Vege  (True)
@@ -294,10 +425,7 @@
       ];
 
       // --- Create Annotations (Text inside the cells) ---
-      // We do this to control the text color based on the cell's background
       const annotations = [];
-      // const threshold = 50; // No longer needed, we'll use dark text for all cells
-
       for (let i = 0; i < labels.length; i++) {
           for (let j = 0; j < labels.length; j++) {
               const value = zData[i][j];
@@ -379,176 +507,62 @@
           responsive: true
       };
 
-      // 4. Render the chart
-      // Plotly.newPlot('confusionMatrixChart', data, layout, config); // <-- This was the error
       Plotly.newPlot('confusionMatrixChart', data, layout, config); // <-- Corrected to target the <div> with id="chart"
 
-
-      // === 4. LOSS CHART ===
-      const ctxLoss = document.getElementById('lossChart').getContext('2d');
       
-      // Create labels for Epochs 1 to 32
-      const epochLabels = Array.from({ length: 32 }, (_, i) => i + 1);
-      
-      // Data extracted from your reference image
-      const trainingLossData = [
-        2.4, 1.3, 0.9, 0.6, 0.35, 0.28, 0.2, 0.15, 0.12, 0.1, 0.08, 0.06, 
-        0.05, 0.04, 0.03, 0.02, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 
-        0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01
-      ];
-      const validationLossData = [
-        3.8, 4.6, 5.9, 4.8, 2.4, 1.2, 1.1, 1.15, 1.2, 1.25, 1.7, 1.2, 
-        1.15, 1.15, 1.2, 1.25, 1.2, 1.15, 1.2, 1.15, 1.1, 1.15, 1.1, 
-        1.1, 1.2, 1.2, 1.15, 1.15, 1.15, 1.15, 1.15, 1.15
-      ];
-      
-      new Chart(ctxLoss, {
+      // === 4. Line Chart (Model Accuracy Training) ===
+      const ctxLine = document.getElementById('lineChart').getContext('2d');
+      new Chart(ctxLine, {
         type: 'line',
         data: {
-          labels: epochLabels,
-          datasets: [
-            {
-              label: 'Training Loss',
-              data: trainingLossData,
-              borderColor: '#3b82f6', // Blue color
-              backgroundColor: 'rgba(59, 130, 246, 0.1)',
-              tension: 0.1,
-              pointStyle: 'circle',
-              pointBackgroundColor: '#3b82f6'
-            },
-            {
-              label: 'Validation Loss',
-              data: validationLossData,
-              borderColor: '#f97316', // Orange color
-              backgroundColor: 'rgba(249, 115, 22, 0.1)',
-              tension: 0.1,
-              pointStyle: 'rect',
-              pointBackgroundColor: '#f97316'
-            }
-          ]
+          labels: ['Epoch 1', 'Epoch 4', 'Epoch 8', 'Epoch 12', 'Epoch 16', 'Epoch 20', 'Epoch 20', 'Epoch 24'],
+          datasets: [{
+            label: 'Accuracy',
+            data: [75.88, 87.80, 70.2, 87.38, 88.08, 90.32, 90.46, 89.76],
+            borderColor: '#008000',
+            backgroundColor: 'rgba(33, 200, 122, 0.1)',
+            fill: true,
+            tension: 0.4
+          }]
         },
         options: {
           responsive: true,
           plugins: {
-            legend: {
-              position: 'top', // Show legend like in the image
-              align: 'end',
-              labels: { color: 'white' }
-            },
+            legend: { display: false },            
+            title: { display: false },
             datalabels: { display: false } // Disable for this chart
           },
           scales: {
-            y: {
-              beginAtZero: true,
-              max: 6.5, // Set max to see the spike
-              title: {
-                display: true,
-                text: 'Loss',
-                color: 'white'
-              },
-              ticks: { color: 'white' }
-            },
-            x: {
-              title: {
-                display: true,
-                text: 'Epoch',
-                color: 'white'
-              },
-              ticks: {
-                color: 'white',
-                callback: function(value, index, values) {
-                  return (index % 5 === 0) ? this.getLabelForValue(value) : '';
-                }
-              }
-            }
-          }
-        }
-      }); 
+            y: {
+              min: 50,
+              max: 100,
+              ticks: { 
+                callback: (value) => value + '%',
+                color: 'white' // <-- Add this line for Y-axis ticks
+              },
+              // Add grid color for consistency
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              }
+            },
+            // Add X-axis definition
+            x: {
+              ticks: {
+                color: 'white' // <-- Add this for X-axis ticks
+              },
+              // Add grid color for consistency
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              }
+            }
+          }
+        } 
+         
 
-
-      // === 5. ACCURACY CHART ===
-      const ctxAccuracy = document.getElementById('accuracyChart').getContext('2d');
-      
-      // Data extracted from your reference image
-      const trainingAccuracyData = [
-        0.41, 0.42, 0.56, 0.68, 0.77, 0.82, 0.89, 0.91, 0.93, 0.94, 0.95, 0.96, 
-        0.97, 0.97, 0.98, 0.98, 0.98, 0.98, 0.99, 0.99, 0.99, 0.99, 0.99, 
-        0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99
-      ];
-      const validationAccuracyData = [
-        0.09, 0.09, 0.1, 0.25, 0.39, 0.62, 0.66, 0.68, 0.69, 0.67, 0.66, 0.65, 
-        0.71, 0.71, 0.71, 0.71, 0.71, 0.72, 0.72, 0.73, 0.73, 0.72, 0.71, 
-        0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.71
-      ];
-      
-      new Chart(ctxAccuracy, {
-        type: 'line',
-        data: {
-          labels: epochLabels,
-          datasets: [
-            {
-              label: 'Training Accuracy',
-              data: trainingAccuracyData,
-              borderColor: '#3b82f6', // Blue color
-              backgroundColor: 'rgba(59, 130, 246, 0.1)',
-              tension: 0.1,
-              pointStyle: 'circle',
-              pointBackgroundColor: '#3b82f6'
-            },
-            {
-              label: 'Validation Accuracy',
-              data: validationAccuracyData,
-              borderColor: '#f97316', // Orange color
-              backgroundColor: 'rgba(249, 115, 22, 0.1)',
-              tension: 0.1,
-              pointStyle: 'rect',
-              pointBackgroundColor: '#f97316'
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { 
-              position: 'top', 
-              align: 'end',
-              labels: { color: 'white' }
-            },
-            datalabels: { display: false } // Disable for this chart
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              max: 1.05, // Max Y-axis at 1.05 (just over 1.0)
-              title: {
-                display: true,
-                text: 'Accuracy',
-                color: 'white'
-              },
-              ticks: { color: 'white' }
-            },
-            x: {
-              title: {
-                display: true,
-                text: 'Epoch',
-                color: 'white'
-              },
-              ticks: {
-                color: 'white',
-                callback: function(value, index, values) {
-                  // Show labels for epochs 0, 5, 10, 15...
-                  return (index % 5 === 0) ? this.getLabelForValue(value) : '';
-                }
-              }
-            }
-          }
-        }
       });
 
       // === 5. PER-CLASS ACCURACY (NEW BAR CHART) ===
-      const ctxBar = document.getElementById('barChart').getContext('2d');
-      
-      // Data from your new image
+      const ctxBar = document.getElementById('barChart').getContext('2d');      
       const perClassLabels = [
           'Cardboard', 'Food Organics', 'Glass', 'Metal', 
           'Miscellaneous Trash', 'Paper', 'Plastic', 'Textile Trash', 'Vegetation'
