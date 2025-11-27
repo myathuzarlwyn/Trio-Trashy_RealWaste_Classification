@@ -58,6 +58,18 @@ WASTE_TO_BIN_MAP = {
     'Textile Trash' : 'General',
     'Vegetation' : 'Food'
 }
+
+CLASS_METRICS = {
+    'Cardboard': {'precision': 0.93, 'recall': 0.91, 'f1': 0.92},
+    'Food Organics': {'precision': 0.92, 'recall': 0.89, 'f1': 0.90},
+    'Glass': {'precision': 0.85, 'recall': 0.97, 'f1': 0.90},
+    'Metal': {'precision': 0.94, 'recall': 0.86, 'f1': 0.89},
+    'Miscellaneous Trash': {'precision': 0.78, 'recall': 0.73, 'f1': 0.76},
+    'Paper': {'precision': 0.95, 'recall': 0.92, 'f1': 0.93},
+    'Plastic': {'precision': 0.86, 'recall': 0.88, 'f1': 0.87},
+    'Textile Trash': {'precision': 0.82, 'recall': 0.96, 'f1': 0.88},
+    'Vegetation': {'precision': 0.97, 'recall': 0.97, 'f1': 0.97}
+}
     
 @app.route('/')
 def home():
@@ -102,13 +114,32 @@ def predict():
         # 5. Get the confidence score
         confidence = float(output[0][prediction_index]) * 100
 
+        class_stats = CLASS_METRICS.get(waste_label, {})
+        class_precision = float(class_stats.get('precision', 0)) * 100
+        class_recall = float(class_stats.get('recall', 0)) * 100
+        class_f1 = float(class_stats.get('f1', 0)) * 100
+
+        print(f"Raw Model Output: {output}")
         print("Array length: " + str(len(output)))
         print("prediction_index : " + str(prediction_index))
         print("waste_label : " + waste_label)
         print("bin_label : " + bin_label)
         print("confidence : " + str(confidence))
         print("dustbin_image_folder: " + dustbin_image_folder)        
-        print("Model file path: " + model_file_path)
+        print("class_precision: " + str(class_precision))
+        print("class_recall: " + str(class_recall))
+        print("class_f1: " + str(class_f1))
+
+        return jsonify({
+            'prediction': bin_label,
+            'waste_type': waste_label,
+            'bin_path': f"/static/Bins/{bin_label}Bin.png",
+            'confidence': f"{confidence:.2f}%",
+            # Return specific stats for the predicted class
+            'class_precision': f"{class_precision:.2f}",
+            'class_recall': f"{class_recall:.2f}",
+            'class_f1': f"{class_f1:.2f}"
+        })
 
         # Check if mapping was successful
         if bin_label is None:
